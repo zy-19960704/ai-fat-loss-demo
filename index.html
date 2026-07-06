@@ -1,0 +1,2535 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI减脂助手</title>
+  <style id="theme-vars">
+:root {
+  /* === Brand Colors === */
+  --color-primary: #22C55E;
+  --color-primary-light: #86EFAC;
+  --color-primary-dark: #16A34A;
+  --color-primary-50: #F0FDF4;
+  --color-primary-100: #DCFCE7;
+  --color-primary-200: #BBF7D0;
+  --color-primary-500: #22C55E;
+  --color-primary-600: #16A34A;
+  --color-primary-700: #15803D;
+
+  --color-bg: #F9FAFB;
+  --color-bg-warm: #FFFBF5;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
+  --color-border: #E5E7EB;
+  --color-border-light: #F3F4F6;
+
+  --color-text-primary: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
+  --color-text-inverse: #FFFFFF;
+  --color-text-brand: #16A34A;
+
+  --color-accent-orange: #FB923C;
+  --color-accent-blue: #60A5FA;
+  --color-accent-pink: #F472B6;
+
+  /* === State Colors === */
+  --state-success: #22C55E;
+  --state-warning: #F59E0B;
+  --state-error: #EF4444;
+  --state-info: #3B82F6;
+
+  /* === Typography === */
+  --font-display: 'DM Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-body: 'DM Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0em;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* === Spacing === */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* === Radius === */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* === Shadows === */
+  --shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-elevated: 0 4px 12px 0 rgba(0, 0, 0, 0.04);
+  --shadow-float: 0 8px 24px 0 rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+  --color-primary: #22C55E;
+  --color-primary-light: #86EFAC;
+  --color-primary-dark: #16A34A;
+  --color-primary-50: #052E16;
+  --color-primary-100: #064E3B;
+  --color-primary-200: #065F46;
+  --color-primary-500: #22C55E;
+  --color-primary-600: #16A34A;
+  --color-primary-700: #15803D;
+
+  --color-bg: #111827;
+  --color-bg-warm: #1A1A1A;
+  --color-surface: #1F2937;
+  --color-surface-elevated: #374151;
+  --color-border: #374151;
+  --color-border-light: #1F2937;
+
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #D1D5DB;
+  --color-text-tertiary: #9CA3AF;
+  --color-text-inverse: #111827;
+  --color-text-brand: #86EFAC;
+
+  --shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-elevated: 0 4px 12px 0 rgba(0, 0, 0, 0.3);
+  --shadow-float: 0 8px 24px 0 rgba(0, 0, 0, 0.4);
+}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style type="text/tailwindcss">
+  @theme inline {
+    --color-primary: var(--color-primary);
+    --color-border: var(--color-border);
+  }
+  @layer base {
+    body { background: var(--color-bg); color: var(--color-text-primary); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+  </style>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    [data-icon] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      background-color: currentColor;
+    }
+    .page { display: none; }
+    .page.active { display: block; }
+    .modal-hidden { display: none !important; }
+    #toast {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
+      background: rgba(0,0,0,0.75); color: #fff; padding: 12px 24px; border-radius: 8px;
+      font-size: 14px; z-index: 9999; opacity: 0; pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s; white-space: nowrap; max-width: 80vw;
+    }
+    #toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="font-body antialiased bg-[var(--color-bg)]">
+
+  <!-- Status Bar Spacer -->
+  <div class="h-11 bg-[var(--color-bg)]"></div>
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-30 border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 backdrop-blur">
+    <div class="flex h-11 items-center px-4">
+      <div class="flex w-[88px] items-center justify-start">
+        <button id="nav-back" class="hidden inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]" aria-label="返回" onclick="goBack()">
+          <i data-lucide="arrow-left" class="h-4 w-4"></i>
+        </button>
+      </div>
+      <div class="min-w-0 flex-1 text-center text-[16px] font-semibold tracking-[-0.02em]" id="nav-title" style="color: var(--color-text-primary);">今日概览</div>
+      <div class="flex h-8 w-[88px] items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]/90 text-[var(--color-text-primary)]" aria-label="小程序菜单">
+        <button class="flex h-full flex-1 items-center justify-center" aria-label="更多">
+          <i data-lucide="more-horizontal" class="h-4 w-4"></i>
+        </button>
+        <span class="h-4 w-px bg-[var(--color-border)]" aria-hidden="true"></span>
+        <button class="flex h-full flex-1 items-center justify-center" aria-label="关闭">
+          <i data-lucide="x" class="h-4 w-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ PAGES ============ -->
+
+  <!-- Page: Home (首页-今日概览) -->
+  <div id="page-home" class="page active">
+    <main class="px-4 pb-24">
+
+      <!-- User Greeting Header -->
+      <section class="flex items-center justify-between py-4">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary-100)]" style="color: var(--color-primary-700);">
+            <i data-lucide="user" class="h-5 w-5"></i>
+          </div>
+          <div>
+            <p class="text-[18px] font-semibold leading-tight" style="color: var(--color-text-primary); text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">早安，小王</p>
+            <p class="mt-0.5 text-[13px]" style="color: var(--color-text-tertiary);">今天也要加油哦</p>
+          </div>
+        </div>
+        <button onclick="showToast('暂无新通知')" class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)]" aria-label="通知">
+          <i data-lucide="bell" class="h-[18px] w-[18px]" style="color: var(--color-text-secondary);"></i>
+          <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[var(--state-error)]"></span>
+        </button>
+      </section>
+
+      <!-- Today's Weight Card -->
+      <section class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-[13px] font-medium" style="color: var(--color-text-secondary);">今日体重</p>
+            <div class="mt-1.5 flex items-baseline gap-1.5">
+              <span id="home-weight-value" class="text-[36px] font-bold leading-none tracking-tight" style="color: var(--color-text-primary);">72.5</span>
+              <span class="text-[14px] font-medium" style="color: var(--color-text-tertiary);">kg</span>
+            </div>
+            <div class="mt-1.5 flex items-center gap-1">
+              <i data-lucide="trending-down" class="h-3.5 w-3.5" style="color: var(--state-success);"></i>
+              <span id="home-weight-change" class="text-[13px] font-medium" style="color: var(--state-success);">0.3 vs 昨日</span>
+            </div>
+          </div>
+          <!-- 7-Day Sparkline -->
+          <div class="mt-1 shrink-0">
+            <svg width="100" height="40" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polyline points="0,30 16,25 33,28 50,18 66,22 83,15 100,10" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="100" cy="10" r="3" fill="var(--color-primary)"/>
+              <circle cx="0" cy="30" r="2" fill="var(--color-primary-200)"/>
+              <circle cx="16" cy="25" r="2" fill="var(--color-primary-200)"/>
+              <circle cx="33" cy="28" r="2" fill="var(--color-primary-200)"/>
+              <circle cx="50" cy="18" r="2" fill="var(--color-primary-200)"/>
+              <circle cx="66" cy="22" r="2" fill="var(--color-primary-200)"/>
+              <circle cx="83" cy="15" r="2" fill="var(--color-primary-200)"/>
+              <text x="0" y="39" font-size="8" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC, sans-serif">周一</text>
+              <text x="83" y="39" font-size="8" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC, sans-serif">周日</text>
+            </svg>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center gap-2">
+          <button onclick="openWeightModal()" class="flex-1 flex h-9 items-center justify-center gap-1.5 rounded-lg text-[14px] font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+            <i data-lucide="scale" class="h-4 w-4"></i>
+            <span>记录体重</span>
+          </button>
+          <button onclick="navigateTo('weight-trend')" class="flex-1 flex h-9 items-center justify-center gap-1.5 rounded-lg text-[14px] font-medium transition-opacity hover:opacity-90 active:scale-[0.98]" style="border: 1px solid var(--color-primary); color: var(--color-primary); background-color: transparent;">
+            <i data-lucide="trending-down" class="h-4 w-4"></i>
+            <span>查看趋势</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Calorie Ring + Macros Row -->
+      <section class="mt-3 grid grid-cols-2 gap-3">
+        <!-- Calorie Ring Card -->
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3" style="box-shadow: var(--shadow-card);">
+          <p class="text-[13px] font-medium" style="color: var(--color-text-secondary);">今日摄入</p>
+          <div class="mt-2 flex items-center justify-center">
+            <div class="relative h-20 w-20">
+              <svg class="h-20 w-20 -rotate-90" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="34" stroke="var(--color-border-light)" stroke-width="6" fill="none"/>
+                <circle cx="40" cy="40" r="34" stroke="var(--color-primary)" stroke-width="6" fill="none" stroke-linecap="round"
+                  stroke-dasharray="213.6" stroke-dashoffset="77"/>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-[16px] font-bold leading-none" style="color: var(--color-text-primary);">71%</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-1.5 text-center">
+            <span class="text-[15px] font-bold" style="color: var(--color-text-primary);">1,280</span>
+            <span class="text-[12px]" style="color: var(--color-text-tertiary);"> / 1,800 kcal</span>
+          </div>
+        </div>
+
+        <!-- Macros Card -->
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3" style="box-shadow: var(--shadow-card);">
+          <p class="text-[13px] font-medium" style="color: var(--color-text-secondary);">营养素</p>
+          <div class="mt-3 flex flex-col gap-2.5">
+            <!-- Protein -->
+            <div>
+              <div class="flex items-baseline justify-between">
+                <span class="text-[12px] whitespace-nowrap" style="color: var(--color-text-secondary);">蛋白质</span>
+                <span class="text-[12px] whitespace-nowrap font-medium" style="color: var(--color-text-primary);">65/120g</span>
+              </div>
+              <div class="mt-1 h-1.5 w-full rounded-full" style="background-color: var(--color-border-light);">
+                <div class="h-1.5 rounded-full" style="width: 54%; background-color: var(--color-accent-blue);"></div>
+              </div>
+            </div>
+            <!-- Carbs -->
+            <div>
+              <div class="flex items-baseline justify-between">
+                <span class="text-[12px] whitespace-nowrap" style="color: var(--color-text-secondary);">碳水</span>
+                <span class="text-[12px] whitespace-nowrap font-medium" style="color: var(--color-text-primary);">80/200g</span>
+              </div>
+              <div class="mt-1 h-1.5 w-full rounded-full" style="background-color: var(--color-border-light);">
+                <div class="h-1.5 rounded-full" style="width: 40%; background-color: var(--color-accent-orange);"></div>
+              </div>
+            </div>
+            <!-- Fat -->
+            <div>
+              <div class="flex items-baseline justify-between">
+                <span class="text-[12px] whitespace-nowrap" style="color: var(--color-text-secondary);">脂肪</span>
+                <span class="text-[12px] whitespace-nowrap font-medium" style="color: var(--color-text-primary);">35/60g</span>
+              </div>
+              <div class="mt-1 h-1.5 w-full rounded-full" style="background-color: var(--color-border-light);">
+                <div class="h-1.5 rounded-full" style="width: 58%; background-color: var(--color-accent-pink);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Water Intake Tracker -->
+      <section class="mt-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i data-lucide="droplets" class="h-4 w-4" style="color: var(--color-accent-blue);"></i>
+            <p class="text-[13px] font-medium" style="color: var(--color-text-secondary);">饮水量</p>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <span id="water-amount" class="text-[15px] font-bold" style="color: var(--color-text-primary);">1,250ml</span>
+            <span class="text-[12px]" style="color: var(--color-text-tertiary);">/ 2,000ml</span>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between">
+          <!-- 8 Water Drop Icons -->
+          <div id="water-cups" class="flex items-center gap-2.5">
+            <i data-lucide="glass-water" class="h-5 w-5" style="color: var(--color-accent-blue);"></i>
+            <i data-lucide="glass-water" class="h-5 w-5" style="color: var(--color-accent-blue);"></i>
+            <i data-lucide="glass-water" class="h-5 w-5" style="color: var(--color-accent-blue);"></i>
+            <i data-lucide="glass-water" class="h-5 w-5" style="color: var(--color-accent-blue);"></i>
+            <i data-lucide="glass-water" class="h-5 w-5" style="color: var(--color-accent-blue);"></i>
+            <i data-lucide="glass-water" class="h-5 w-5" style="color: var(--color-border-light);"></i>
+            <i data-lucide="glass-water" class="h-5 w-5" style="color: var(--color-border-light);"></i>
+            <i data-lucide="glass-water" class="h-5 w-5" style="color: var(--color-border-light);"></i>
+          </div>
+          <button onclick="adjustWater(-250)" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-opacity hover:opacity-90 active:scale-[0.96]" style="background-color: var(--color-border-light); color: var(--color-text-tertiary);" aria-label="减少饮水">
+            <i data-lucide="minus" class="h-4 w-4"></i>
+          </button>
+          <button onclick="adjustWater(250)" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-opacity hover:opacity-90 active:scale-[0.96]" style="background-color: var(--color-primary-50); color: var(--color-primary-700);" aria-label="添加饮水">
+            <i data-lucide="plus" class="h-4 w-4"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- Quick Action Grid -->
+      <section class="mt-3">
+        <div class="grid grid-cols-4 gap-2">
+          <!-- Photo Record -->
+          <button onclick="showToast('拍照功能开发中...')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="camera" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium whitespace-nowrap" style="color: var(--color-text-secondary);">拍照记录</span>
+          </button>
+          <!-- AI Analysis -->
+          <button onclick="switchTab('ai')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="sparkles" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium whitespace-nowrap" style="color: var(--color-text-secondary);">AI 分析</span>
+          </button>
+          <!-- Exercise Record -->
+          <button onclick="switchTab('exercise')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="dumbbell" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium whitespace-nowrap" style="color: var(--color-text-secondary);">运动记录</span>
+          </button>
+          <!-- Health Report -->
+          <button onclick="navigateTo('health-report')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="bar-chart-3" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium whitespace-nowrap" style="color: var(--color-text-secondary);">健康报告</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Page: Meal (饮食记录) -->
+  <div id="page-meal" class="page">
+    <main class="min-h-screen pb-[84px]">
+
+      <!-- Week Date Selector -->
+      <section class="border-b border-[var(--color-border-light)] bg-[var(--color-bg)] px-4 py-3">
+        <div class="flex items-center justify-between gap-1">
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周一</span>
+            <span class="text-[16px] font-bold">22</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: transparent;"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周二</span>
+            <span class="text-[16px] font-bold">23</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: transparent;"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周三</span>
+            <span class="text-[16px] font-bold">24</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: transparent;"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周四</span>
+            <span class="text-[16px] font-bold">25</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: transparent;"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周五</span>
+            <span class="text-[16px] font-bold">26</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: transparent;"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+            <span class="text-[11px] font-medium">周六</span>
+            <span class="text-[16px] font-bold">27</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: var(--color-text-inverse);"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周日</span>
+            <span class="text-[16px] font-bold">28</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: transparent;"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Calorie Summary Bar -->
+      <section class="px-4 py-4">
+        <div class="flex items-center justify-between rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex flex-col items-center">
+            <span class="text-[11px]" style="color: var(--color-text-tertiary);">摄入</span>
+            <div class="mt-1 flex items-baseline gap-0.5">
+              <span class="text-[18px] font-bold" style="color: var(--color-text-primary);">1,280</span>
+              <span class="text-[11px]" style="color: var(--color-text-tertiary);">kcal</span>
+            </div>
+          </div>
+          <div class="h-8 w-px" style="background-color: var(--color-border-light);"></div>
+          <div class="flex flex-col items-center">
+            <span class="text-[11px]" style="color: var(--color-text-tertiary);">消耗</span>
+            <div class="mt-1 flex items-baseline gap-0.5">
+              <span class="text-[18px] font-bold" style="color: var(--color-accent-orange);">450</span>
+              <span class="text-[11px]" style="color: var(--color-text-tertiary);">kcal</span>
+            </div>
+          </div>
+          <div class="h-8 w-px" style="background-color: var(--color-border-light);"></div>
+          <div class="flex flex-col items-center">
+            <span class="text-[11px]" style="color: var(--color-text-tertiary);">剩余</span>
+            <div class="mt-1 flex items-baseline gap-0.5">
+              <span class="text-[18px] font-bold" style="color: var(--color-primary);">520</span>
+              <span class="text-[11px]" style="color: var(--color-text-tertiary);">kcal</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Meal Sections -->
+      <section class="px-4">
+        <!-- Breakfast -->
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+                <i data-lucide="sunrise" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+              </div>
+              <div>
+                <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">早餐</p>
+                <p class="text-[11px]" style="color: var(--color-text-tertiary);">07:30 · 380 kcal</p>
+              </div>
+            </div>
+            <button class="flex h-7 w-7 items-center justify-center rounded-lg" style="color: var(--color-primary);" aria-label="添加早餐">
+              <i data-lucide="plus" class="h-4 w-4"></i>
+            </button>
+          </div>
+          <div class="mt-3 flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 shrink-0 rounded-md" style="background-color: var(--color-primary-100);"></div>
+                <div>
+                  <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">全麦面包</p>
+                  <p class="text-[11px]" style="color: var(--color-text-tertiary);">2 片 · 80g</p>
+                </div>
+              </div>
+              <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">120 kcal</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 shrink-0 rounded-md" style="background-color: var(--color-accent-orange); opacity: 0.3;"></div>
+                <div>
+                  <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">煮鸡蛋</p>
+                  <p class="text-[11px]" style="color: var(--color-text-tertiary);">1 个 · 50g</p>
+                </div>
+              </div>
+              <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">78 kcal</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 shrink-0 rounded-md" style="background-color: var(--color-accent-blue); opacity: 0.3;"></div>
+                <div>
+                  <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">牛奶</p>
+                  <p class="text-[11px]" style="color: var(--color-text-tertiary);">1 杯 · 250ml</p>
+                </div>
+              </div>
+              <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">150 kcal</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 shrink-0 rounded-md" style="background-color: var(--color-primary-200);"></div>
+                <div>
+                  <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">蓝莓</p>
+                  <p class="text-[11px]" style="color: var(--color-text-tertiary);">1 把 · 30g</p>
+                </div>
+              </div>
+              <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">32 kcal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lunch -->
+        <div class="mt-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+                <i data-lucide="sun" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+              </div>
+              <div>
+                <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">午餐</p>
+                <p class="text-[11px]" style="color: var(--color-text-tertiary);">12:30 · 520 kcal</p>
+              </div>
+            </div>
+            <button class="flex h-7 w-7 items-center justify-center rounded-lg" style="color: var(--color-primary);" aria-label="添加午餐">
+              <i data-lucide="plus" class="h-4 w-4"></i>
+            </button>
+          </div>
+          <div class="mt-3 flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 shrink-0 rounded-md" style="background-color: var(--color-accent-orange); opacity: 0.3;"></div>
+                <div>
+                  <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">糙米饭</p>
+                  <p class="text-[11px]" style="color: var(--color-text-tertiary);">1 碗 · 150g</p>
+                </div>
+              </div>
+              <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">180 kcal</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 shrink-0 rounded-md" style="background-color: var(--color-accent-pink); opacity: 0.3;"></div>
+                <div>
+                  <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">鸡胸肉</p>
+                  <p class="text-[11px]" style="color: var(--color-text-tertiary);">1 块 · 120g</p>
+                </div>
+              </div>
+              <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">165 kcal</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 shrink-0 rounded-md" style="background-color: var(--color-primary-200);"></div>
+                <div>
+                  <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">西兰花</p>
+                  <p class="text-[11px]" style="color: var(--color-text-tertiary);">1 份 · 100g</p>
+                </div>
+              </div>
+              <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">35 kcal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dinner (Empty) -->
+        <div class="mt-3 rounded-lg border border-dashed border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full" style="background-color: var(--color-border-light);">
+                <i data-lucide="moon" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+              </div>
+              <div>
+                <p class="text-[14px] font-semibold" style="color: var(--color-text-secondary);">晚餐</p>
+                <p class="text-[11px]" style="color: var(--color-text-tertiary);">尚未记录</p>
+              </div>
+            </div>
+            <button class="flex h-7 items-center gap-1 rounded-lg px-2 text-[12px] font-medium" style="color: var(--color-primary);">
+              <i data-lucide="plus" class="h-3.5 w-3.5"></i>
+              <span>添加</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Snack -->
+        <div class="mt-3 mb-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+                <i data-lucide="apple" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+              </div>
+              <div>
+                <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">加餐</p>
+                <p class="text-[11px]" style="color: var(--color-text-tertiary);">15:00 · 180 kcal</p>
+              </div>
+            </div>
+            <button class="flex h-7 w-7 items-center justify-center rounded-lg" style="color: var(--color-primary);" aria-label="添加加餐">
+              <i data-lucide="plus" class="h-4 w-4"></i>
+            </button>
+          </div>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="h-8 w-8 shrink-0 rounded-md" style="background-color: var(--color-accent-orange); opacity: 0.3;"></div>
+              <div>
+                <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">杏仁</p>
+                <p class="text-[11px]" style="color: var(--color-text-tertiary);">1 把 · 30g</p>
+              </div>
+            </div>
+            <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">180 kcal</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Nutrition Pie Chart -->
+      <section class="px-4 pb-4">
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">营养素占比</p>
+          <div class="mt-3 flex items-center gap-4">
+            <!-- Donut Chart SVG -->
+            <div class="relative h-24 w-24 shrink-0">
+              <svg class="h-24 w-24 -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="var(--color-accent-blue)" stroke-width="14" fill="none"
+                  stroke-dasharray="120.6 251.2" stroke-dashoffset="0"/>
+                <circle cx="50" cy="50" r="40" stroke="var(--color-accent-orange)" stroke-width="14" fill="none"
+                  stroke-dasharray="80.4 251.2" stroke-dashoffset="-120.6"/>
+                <circle cx="50" cy="50" r="40" stroke="var(--color-accent-pink)" stroke-width="14" fill="none"
+                  stroke-dasharray="50.2 251.2" stroke-dashoffset="-201"/>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-[10px]" style="color: var(--color-text-tertiary);">总计</span>
+                <span class="text-[14px] font-bold" style="color: var(--color-text-primary);">1,280</span>
+                <span class="text-[9px]" style="color: var(--color-text-tertiary);">kcal</span>
+              </div>
+            </div>
+            <div class="flex-1 flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full" style="background-color: var(--color-accent-blue);"></span>
+                  <span class="text-[12px]" style="color: var(--color-text-secondary);">蛋白质</span>
+                </div>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">65g</span>
+                  <span class="text-[11px]" style="color: var(--color-text-tertiary);">20%</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full" style="background-color: var(--color-accent-orange);"></span>
+                  <span class="text-[12px]" style="color: var(--color-text-secondary);">碳水</span>
+                </div>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">160g</span>
+                  <span class="text-[11px]" style="color: var(--color-text-tertiary);">50%</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full" style="background-color: var(--color-accent-pink);"></span>
+                  <span class="text-[12px]" style="color: var(--color-text-secondary);">脂肪</span>
+                </div>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-[13px] font-semibold" style="color: var(--color-text-primary);">35g</span>
+                  <span class="text-[11px]" style="color: var(--color-text-tertiary);">30%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Page: Exercise (运动记录) -->
+  <div id="page-exercise" class="page">
+    <main class="min-h-screen pb-[84px]">
+
+      <!-- Week Date Selector -->
+      <section class="border-b border-[var(--color-border-light)] bg-[var(--color-bg)] px-4 py-3">
+        <div class="flex items-center justify-between gap-1">
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周一</span>
+            <span class="text-[16px] font-bold">22</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: var(--color-primary);"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周二</span>
+            <span class="text-[16px] font-bold">23</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: var(--color-primary);"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周三</span>
+            <span class="text-[16px] font-bold">24</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: transparent;"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周四</span>
+            <span class="text-[16px] font-bold">25</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: var(--color-primary);"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周五</span>
+            <span class="text-[16px] font-bold">26</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: var(--color-primary);"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+            <span class="text-[11px] font-medium">周六</span>
+            <span class="text-[16px] font-bold">27</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: var(--color-text-inverse);"></span>
+          </button>
+          <button onclick="selectDate(this)" class="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1.5" style="color: var(--color-text-tertiary);">
+            <span class="text-[11px]">周日</span>
+            <span class="text-[16px] font-bold">28</span>
+            <span class="h-1 w-1 rounded-full" style="background-color: transparent;"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Today's Exercise Summary -->
+      <section class="px-4 py-4">
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-[13px] font-medium" style="color: var(--color-text-secondary);">今日消耗</p>
+              <div class="mt-1 flex items-baseline gap-1">
+                <span class="text-[32px] font-bold leading-none tracking-tight" style="color: var(--color-text-primary);">450</span>
+                <span class="text-[14px] font-medium" style="color: var(--color-text-tertiary);">kcal</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="clock" class="h-3.5 w-3.5" style="color: var(--color-primary);"></i>
+                <span class="text-[13px] font-medium" style="color: var(--color-text-secondary);">55 分钟</span>
+              </div>
+              <div class="mt-1 flex items-center gap-1.5">
+                <i data-lucide="flame" class="h-3.5 w-3.5" style="color: var(--color-accent-orange);"></i>
+                <span class="text-[13px] font-medium" style="color: var(--color-text-secondary);">2 项运动</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 h-2 w-full rounded-full" style="background-color: var(--color-border-light);">
+            <div class="h-2 rounded-full" style="width: 75%; background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));"></div>
+          </div>
+          <div class="mt-1.5 flex justify-between">
+            <span class="text-[11px]" style="color: var(--color-text-tertiary);">目标 600 kcal</span>
+            <span class="text-[11px] font-medium" style="color: var(--color-primary);">已完成 75%</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Exercise Type Quick Select -->
+      <section class="px-4">
+        <p class="text-[14px] font-semibold mb-3" style="color: var(--color-text-primary);">快速记录</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="navigateTo('add-exercise')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="footprints" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">跑步</span>
+          </button>
+          <button onclick="navigateTo('add-exercise')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="dumbbell" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">力量训练</span>
+          </button>
+          <button onclick="navigateTo('add-exercise')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="flower-2" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">瑜伽</span>
+          </button>
+          <button onclick="navigateTo('add-exercise')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="bike" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">骑行</span>
+          </button>
+          <button onclick="navigateTo('add-exercise')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="waves" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">游泳</span>
+          </button>
+          <button onclick="navigateTo('add-exercise')" class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90 active:scale-[0.96]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="plus" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">其他</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Today's Exercise Log -->
+      <section class="mt-4 px-4">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">今日运动</p>
+          <button onclick="navigateTo('add-exercise')" class="flex items-center gap-1 text-[13px] font-medium" style="color: var(--color-primary);">
+            <i data-lucide="plus" class="h-3.5 w-3.5"></i>
+            <span>添加</span>
+          </button>
+        </div>
+        <div class="flex flex-col gap-2">
+          <!-- Morning Run -->
+          <div class="flex items-center gap-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="footprints" class="h-6 w-6" style="color: var(--color-primary-600);"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">晨跑</p>
+                <span class="text-[14px] font-bold" style="color: var(--color-primary);">320 kcal</span>
+              </div>
+              <div class="mt-1 flex items-center gap-3 text-[12px]" style="color: var(--color-text-tertiary);">
+                <span class="flex items-center gap-1"><i data-lucide="clock" class="h-3 w-3"></i>30 分钟</span>
+                <span class="flex items-center gap-1"><i data-lucide="map-pin" class="h-3 w-3"></i>3.2 km</span>
+                <span>07:00</span>
+              </div>
+            </div>
+          </div>
+          <!-- Strength Training -->
+          <div class="flex items-center gap-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="dumbbell" class="h-6 w-6" style="color: var(--color-primary-600);"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">力量训练</p>
+                <span class="text-[14px] font-bold" style="color: var(--color-primary);">130 kcal</span>
+              </div>
+              <div class="mt-1 flex items-center gap-3 text-[12px]" style="color: var(--color-text-tertiary);">
+                <span class="flex items-center gap-1"><i data-lucide="clock" class="h-3 w-3"></i>25 分钟</span>
+                <span class="flex items-center gap-1"><i data-lucide="repeat" class="h-3 w-3"></i>4 组</span>
+                <span>18:30</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Weekly Exercise Chart -->
+      <section class="mt-4 px-4 pb-4">
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">本周运动</p>
+            <span class="text-[12px]" style="color: var(--color-text-tertiary);">共 4 天 · 1,650 kcal</span>
+          </div>
+          <!-- Bar Chart SVG -->
+          <div class="flex items-end justify-between gap-2 h-32">
+            <div class="flex flex-1 flex-col items-center gap-1">
+              <div class="w-full rounded-t" style="height: 60%; background-color: var(--color-primary);"></div>
+              <span class="text-[10px]" style="color: var(--color-text-tertiary);">周一</span>
+            </div>
+            <div class="flex flex-1 flex-col items-center gap-1">
+              <div class="w-full rounded-t" style="height: 45%; background-color: var(--color-primary);"></div>
+              <span class="text-[10px]" style="color: var(--color-text-tertiary);">周二</span>
+            </div>
+            <div class="flex flex-1 flex-col items-center gap-1">
+              <div class="w-full rounded-t" style="height: 0%; background-color: var(--color-border-light);"></div>
+              <span class="text-[10px]" style="color: var(--color-text-tertiary);">周三</span>
+            </div>
+            <div class="flex flex-1 flex-col items-center gap-1">
+              <div class="w-full rounded-t" style="height: 80%; background-color: var(--color-primary);"></div>
+              <span class="text-[10px]" style="color: var(--color-text-tertiary);">周四</span>
+            </div>
+            <div class="flex flex-1 flex-col items-center gap-1">
+              <div class="w-full rounded-t" style="height: 50%; background-color: var(--color-primary);"></div>
+              <span class="text-[10px]" style="color: var(--color-text-tertiary);">周五</span>
+            </div>
+            <div class="flex flex-1 flex-col items-center gap-1">
+              <div class="w-full rounded-t" style="height: 75%; background-color: var(--color-primary-600);"></div>
+              <span class="text-[10px] font-semibold" style="color: var(--color-primary);">周六</span>
+            </div>
+            <div class="flex flex-1 flex-col items-center gap-1">
+              <div class="w-full rounded-t" style="height: 0%; background-color: var(--color-border-light);"></div>
+              <span class="text-[10px]" style="color: var(--color-text-tertiary);">周日</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Page: AI (AI智能分析) -->
+  <div id="page-ai" class="page">
+    <div class="flex flex-col" style="min-height: calc(100vh - 44px - 44px - 84px);">
+
+      <!-- AI Subtitle -->
+      <section class="shrink-0 px-4 pt-4 pb-2">
+        <div class="flex items-center gap-2">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full" style="background-color: var(--color-primary-100);">
+            <i data-lucide="sparkles" class="h-4 w-4" style="color: var(--color-primary-700);"></i>
+          </div>
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">AI 健康顾问</p>
+        </div>
+        <p class="mt-1.5 text-[13px]" style="color: var(--color-text-secondary);">你好！我是你的 AI 健康顾问，有什么可以帮你的吗？</p>
+      </section>
+
+      <!-- Quick Question Tags -->
+      <section class="shrink-0 px-4 pb-3">
+        <div class="flex flex-wrap gap-2">
+          <button onclick="sendQuickQuestion(this)" class="flex items-center gap-1 rounded-full border px-3 py-1.5 text-[12px] font-medium transition-opacity hover:opacity-90" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50); color: var(--color-primary-700);">
+            <i data-lucide="utensils" class="h-3 w-3"></i>
+            <span>分析今日饮食</span>
+          </button>
+          <button onclick="sendQuickQuestion(this)" class="flex items-center gap-1 rounded-full border px-3 py-1.5 text-[12px] font-medium transition-opacity hover:opacity-90" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50); color: var(--color-primary-700);">
+            <i data-lucide="dumbbell" class="h-3 w-3"></i>
+            <span>推荐运动方案</span>
+          </button>
+          <button onclick="sendQuickQuestion(this)" class="flex items-center gap-1 rounded-full border px-3 py-1.5 text-[12px] font-medium transition-opacity hover:opacity-90" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50); color: var(--color-primary-700);">
+            <i data-lucide="trending-down" class="h-3 w-3"></i>
+            <span>减脂建议</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Chat Conversation -->
+      <section id="ai-chat" class="flex-1 overflow-y-auto px-4 pb-3" style="max-height: calc(100vh - 44px - 44px - 84px - 120px - 72px);">
+        <!-- User Message -->
+        <div class="flex justify-end">
+          <div class="max-w-[80%] rounded-2xl rounded-tr-md px-3.5 py-2.5 text-[14px]" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+            <p>帮我分析一下今天的饮食是否合理</p>
+          </div>
+        </div>
+
+        <!-- AI Message -->
+        <div class="mt-3 flex justify-start">
+          <div class="flex gap-2 max-w-[88%]">
+            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style="background-color: var(--color-primary-100);">
+              <i data-lucide="bot" class="h-4 w-4" style="color: var(--color-primary-700);"></i>
+            </div>
+            <div class="rounded-2xl rounded-tl-md border border-[var(--color-border-light)] bg-[var(--color-surface)] px-3.5 py-2.5" style="box-shadow: var(--shadow-card);">
+              <p class="text-[14px] leading-relaxed" style="color: var(--color-text-primary);">根据你今天的饮食记录，我来为你分析一下：</p>
+              <div class="mt-2 space-y-1.5">
+                <div class="flex items-start gap-1.5">
+                  <i data-lucide="check-circle-2" class="h-4 w-4 shrink-0 mt-0.5" style="color: var(--color-primary);"></i>
+                  <p class="text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">蛋白质摄入充足，达到每日目标的 54%</p>
+                </div>
+                <div class="flex items-start gap-1.5">
+                  <i data-lucide="alert-circle" class="h-4 w-4 shrink-0 mt-0.5" style="color: var(--state-warning);"></i>
+                  <p class="text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">碳水比例略高，建议晚餐减少主食</p>
+                </div>
+                <div class="flex items-start gap-1.5">
+                  <i data-lucide="check-circle-2" class="h-4 w-4 shrink-0 mt-0.5" style="color: var(--color-primary);"></i>
+                  <p class="text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">膳食纤维摄入良好，继续保持</p>
+                </div>
+              </div>
+              <div class="mt-3 rounded-lg p-3" style="background-color: var(--color-primary-50);">
+                <p class="text-[12px] font-semibold" style="color: var(--color-primary-700);">建议</p>
+                <p class="mt-1 text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">晚餐可以选择一份鸡胸肉沙拉搭配少量糙米饭，总热量控制在 400 kcal 以内。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="mt-3 flex justify-start">
+          <div class="flex gap-2">
+            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style="background-color: var(--color-primary-100);">
+              <i data-lucide="bot" class="h-4 w-4" style="color: var(--color-primary-700);"></i>
+            </div>
+            <div class="rounded-2xl rounded-tl-md border border-[var(--color-border-light)] bg-[var(--color-surface)] px-4 py-3" style="box-shadow: var(--shadow-card);">
+              <div class="flex items-center gap-1">
+                <span class="h-1.5 w-1.5 rounded-full" style="background-color: var(--color-text-tertiary); animation: blink 1.4s infinite;"></span>
+                <span class="h-1.5 w-1.5 rounded-full" style="background-color: var(--color-text-tertiary); animation: blink 1.4s infinite 0.2s;"></span>
+                <span class="h-1.5 w-1.5 rounded-full" style="background-color: var(--color-text-tertiary); animation: blink 1.4s infinite 0.4s;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Input Bar -->
+      <div class="shrink-0 sticky bottom-[84px] border-t border-[var(--color-border-light)] bg-[var(--color-surface)] px-4 py-2.5">
+        <div class="flex items-center gap-2">
+          <button class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" style="color: var(--color-text-tertiary);" aria-label="更多">
+            <i data-lucide="plus" class="h-5 w-5"></i>
+          </button>
+          <div class="flex-1 flex items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2">
+            <input type="text" id="ai-input" placeholder="输入你的问题..." class="flex-1 bg-transparent text-[14px] outline-none" style="color: var(--color-text-primary);" onkeydown="if(event.key==='Enter'){event.preventDefault();sendAIMessage();}">
+            <button class="ml-2 shrink-0" style="color: var(--color-text-tertiary);" aria-label="语音输入">
+              <i data-lucide="mic" class="h-4 w-4"></i>
+            </button>
+          </div>
+          <button onclick="sendAIMessage()" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-opacity hover:opacity-90" style="background-color: var(--color-primary); color: var(--color-text-inverse);" aria-label="发送">
+            <i data-lucide="arrow-up" class="h-5 w-5"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Page: Mine (我的) -->
+  <div id="page-mine" class="page">
+    <main class="px-4 pb-24">
+
+      <!-- User Profile Header -->
+      <section class="py-6 flex flex-col items-center">
+        <div class="h-20 w-20 rounded-full flex items-center justify-center" style="background-color: var(--color-primary-100);">
+          <i data-lucide="user" class="h-10 w-10" style="color: var(--color-primary-700);"></i>
+        </div>
+        <p class="mt-3 text-[18px] font-semibold" style="color: var(--color-text-primary);">小王</p>
+        <p class="mt-1 text-[13px]" style="color: var(--color-text-tertiary);">已坚持减脂 28 天</p>
+        <div class="mt-3 flex items-center gap-4">
+          <div class="flex flex-col items-center">
+            <span class="text-[16px] font-bold" style="color: var(--color-text-primary);">28</span>
+            <span class="text-[11px]" style="color: var(--color-text-tertiary);">连续天数</span>
+          </div>
+          <div class="h-6 w-px" style="background-color: var(--color-border-light);"></div>
+          <div class="flex flex-col items-center">
+            <span class="text-[16px] font-bold" style="color: var(--color-text-primary);">3.2</span>
+            <span class="text-[11px]" style="color: var(--color-text-tertiary);">减重 (kg)</span>
+          </div>
+          <div class="h-6 w-px" style="background-color: var(--color-border-light);"></div>
+          <div class="flex flex-col items-center">
+            <span class="text-[16px] font-bold" style="color: var(--color-text-primary);">15</span>
+            <span class="text-[11px]" style="color: var(--color-text-tertiary);">成就</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings List -->
+      <section class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] overflow-hidden" style="box-shadow: var(--shadow-card);">
+        <button class="flex w-full items-center justify-between px-4 py-3.5 border-b border-[var(--color-border-light)]">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="target" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[14px] font-medium" style="color: var(--color-text-primary);">目标设置</span>
+          </div>
+          <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+        </button>
+        <button class="flex w-full items-center justify-between px-4 py-3.5 border-b border-[var(--color-border-light)]">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="bell" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[14px] font-medium" style="color: var(--color-text-primary);">提醒设置</span>
+          </div>
+          <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+        </button>
+        <button class="flex w-full items-center justify-between px-4 py-3.5 border-b border-[var(--color-border-light)]">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="shield-check" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[14px] font-medium" style="color: var(--color-text-primary);">隐私与安全</span>
+          </div>
+          <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+        </button>
+        <button class="flex w-full items-center justify-between px-4 py-3.5">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="settings" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[14px] font-medium" style="color: var(--color-text-primary);">通用设置</span>
+          </div>
+          <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+        </button>
+      </section>
+
+      <!-- Management Entries -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-3" style="color: var(--color-text-primary);">管理端</p>
+        <div class="flex flex-col gap-3">
+          <!-- Enterprise Dashboard -->
+          <button onclick="navigateTo('enterprise')" class="flex items-center gap-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4 transition-opacity hover:opacity-90 active:scale-[0.98]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg" style="background-color: var(--color-primary-100);">
+              <i data-lucide="layout-dashboard" class="h-5 w-5" style="color: var(--color-primary-700);"></i>
+            </div>
+            <div class="flex-1 text-left">
+              <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">企业管理看板</p>
+              <p class="mt-0.5 text-[12px]" style="color: var(--color-text-tertiary);">查看企业健康数据与排名</p>
+            </div>
+            <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+          </button>
+          <!-- Publish Activity -->
+          <button onclick="navigateTo('publish-activity')" class="flex items-center gap-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4 transition-opacity hover:opacity-90 active:scale-[0.98]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg" style="background-color: var(--color-primary-100);">
+              <i data-lucide="megaphone" class="h-5 w-5" style="color: var(--color-primary-700);"></i>
+            </div>
+            <div class="flex-1 text-left">
+              <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">发布减脂活动</p>
+              <p class="mt-0.5 text-[12px]" style="color: var(--color-text-tertiary);">创建企业减脂挑战活动</p>
+            </div>
+            <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+          </button>
+          <!-- Push Notice -->
+          <button onclick="navigateTo('push-notice')" class="flex items-center gap-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4 transition-opacity hover:opacity-90 active:scale-[0.98]" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg" style="background-color: var(--color-primary-100);">
+              <i data-lucide="send" class="h-5 w-5" style="color: var(--color-primary-700);"></i>
+            </div>
+            <div class="flex-1 text-left">
+              <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">推送健康公告</p>
+              <p class="mt-0.5 text-[12px]" style="color: var(--color-text-tertiary);">向员工推送健康提醒公告</p>
+            </div>
+            <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section class="mt-4 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] overflow-hidden" style="box-shadow: var(--shadow-card);">
+        <button class="flex w-full items-center justify-between px-4 py-3.5 border-b border-[var(--color-border-light)]">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-border-light);">
+              <i data-lucide="info" class="h-4 w-4" style="color: var(--color-text-secondary);"></i>
+            </div>
+            <span class="text-[14px] font-medium" style="color: var(--color-text-primary);">关于我们</span>
+          </div>
+          <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+        </button>
+        <button class="flex w-full items-center justify-between px-4 py-3.5">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-border-light);">
+              <i data-lucide="help-circle" class="h-4 w-4" style="color: var(--color-text-secondary);"></i>
+            </div>
+            <span class="text-[14px] font-medium" style="color: var(--color-text-primary);">帮助与反馈</span>
+          </div>
+          <i data-lucide="chevron-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+        </button>
+      </section>
+
+      <p class="mt-6 text-center text-[12px]" style="color: var(--color-text-tertiary);">AI减脂助手 v1.0.0</p>
+
+    </main>
+  </div>
+
+  <!-- Page: Weight Trend (体重趋势) -->
+  <div id="page-weight-trend" class="page">
+    <main class="px-4 pb-24">
+
+      <!-- Time Range Selector -->
+      <section class="py-4">
+        <div class="flex items-center gap-1 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-1" style="box-shadow: var(--shadow-card);">
+          <button class="flex-1 rounded-md py-1.5 text-[13px] font-medium" style="color: var(--color-text-tertiary);">7 天</button>
+          <button class="flex-1 rounded-md py-1.5 text-[13px] font-semibold" style="background-color: var(--color-primary); color: var(--color-text-inverse);">30 天</button>
+          <button class="flex-1 rounded-md py-1.5 text-[13px] font-medium" style="color: var(--color-text-tertiary);">3 个月</button>
+          <button class="flex-1 rounded-md py-1.5 text-[13px] font-medium" style="color: var(--color-text-tertiary);">全部</button>
+        </div>
+      </section>
+
+      <!-- Weight Trend Chart -->
+      <section class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <p class="text-[13px] font-medium" style="color: var(--color-text-secondary);">当前体重</p>
+            <div class="mt-1 flex items-baseline gap-1.5">
+              <span class="text-[28px] font-bold leading-none" style="color: var(--color-text-primary);">72.5</span>
+              <span class="text-[14px]" style="color: var(--color-text-tertiary);">kg</span>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="flex items-center gap-1 justify-end">
+              <i data-lucide="trending-down" class="h-4 w-4" style="color: var(--state-success);"></i>
+              <span class="text-[14px] font-bold" style="color: var(--state-success);">-2.8 kg</span>
+            </div>
+            <p class="mt-0.5 text-[11px]" style="color: var(--color-text-tertiary);">较 30 天前</p>
+          </div>
+        </div>
+        <!-- Line Chart SVG -->
+        <div class="relative">
+          <svg viewBox="0 0 320 140" class="w-full" style="height: 140px;">
+            <!-- Grid Lines -->
+            <line x1="0" y1="20" x2="320" y2="20" stroke="var(--color-border-light)" stroke-width="1" stroke-dasharray="4 4"/>
+            <line x1="0" y1="60" x2="320" y2="60" stroke="var(--color-border-light)" stroke-width="1" stroke-dasharray="4 4"/>
+            <line x1="0" y1="100" x2="320" y2="100" stroke="var(--color-border-light)" stroke-width="1" stroke-dasharray="4 4"/>
+            <!-- Y Axis Labels -->
+            <text x="4" y="18" font-size="9" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC">76</text>
+            <text x="4" y="58" font-size="9" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC">74</text>
+            <text x="4" y="98" font-size="9" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC">72</text>
+            <!-- Area Fill -->
+            <path d="M20,30 L40,35 L60,42 L80,38 L100,48 L120,55 L140,50 L160,60 L180,65 L200,58 L220,70 L240,75 L260,72 L280,80 L300,85 L300,120 L20,120 Z" fill="var(--color-primary)" fill-opacity="0.1"/>
+            <!-- Line -->
+            <path d="M20,30 L40,35 L60,42 L80,38 L100,48 L120,55 L140,50 L160,60 L180,65 L200,58 L220,70 L240,75 L260,72 L280,80 L300,85" stroke="var(--color-primary)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Points -->
+            <circle cx="20" cy="30" r="2" fill="var(--color-primary-200)"/>
+            <circle cx="60" cy="42" r="2" fill="var(--color-primary-200)"/>
+            <circle cx="100" cy="48" r="2" fill="var(--color-primary-200)"/>
+            <circle cx="140" cy="50" r="2" fill="var(--color-primary-200)"/>
+            <circle cx="180" cy="65" r="2" fill="var(--color-primary-200)"/>
+            <circle cx="220" cy="70" r="2" fill="var(--color-primary-200)"/>
+            <circle cx="260" cy="72" r="2" fill="var(--color-primary-200)"/>
+            <circle cx="300" cy="85" r="3.5" fill="var(--color-primary)" stroke="var(--color-surface)" stroke-width="2"/>
+            <!-- X Axis Labels -->
+            <text x="14" y="135" font-size="9" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC">6.1</text>
+            <text x="94" y="135" font-size="9" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC">6.8</text>
+            <text x="174" y="135" font-size="9" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC">6.15</text>
+            <text x="254" y="135" font-size="9" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC">6.22</text>
+            <text x="288" y="135" font-size="9" fill="var(--color-text-tertiary)" font-family="DM Sans, PingFang SC">6.27</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Stats Cards -->
+      <section class="mt-3 grid grid-cols-3 gap-2">
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 text-center" style="box-shadow: var(--shadow-card);">
+          <p class="text-[11px]" style="color: var(--color-text-tertiary);">最高</p>
+          <p class="mt-1 text-[16px] font-bold" style="color: var(--color-text-primary);">75.3</p>
+          <p class="text-[10px]" style="color: var(--color-text-tertiary);">kg</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 text-center" style="box-shadow: var(--shadow-card);">
+          <p class="text-[11px]" style="color: var(--color-text-tertiary);">最低</p>
+          <p class="mt-1 text-[16px] font-bold" style="color: var(--color-primary);">72.5</p>
+          <p class="text-[10px]" style="color: var(--color-text-tertiary);">kg</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 text-center" style="box-shadow: var(--shadow-card);">
+          <p class="text-[11px]" style="color: var(--color-text-tertiary);">平均</p>
+          <p class="mt-1 text-[16px] font-bold" style="color: var(--color-text-primary);">73.6</p>
+          <p class="text-[10px]" style="color: var(--color-text-tertiary);">kg</p>
+        </div>
+      </section>
+
+      <!-- Body Fat Trend -->
+      <section class="mt-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">体脂率趋势</p>
+          <span class="text-[12px]" style="color: var(--color-text-tertiary);">当前 22.5%</span>
+        </div>
+        <div class="flex items-end justify-between gap-1.5 h-20">
+          <div class="flex flex-1 flex-col items-center gap-1">
+            <div class="w-full rounded-t" style="height: 85%; background-color: var(--color-accent-orange); opacity: 0.5;"></div>
+            <span class="text-[9px]" style="color: var(--color-text-tertiary);">6.1</span>
+          </div>
+          <div class="flex flex-1 flex-col items-center gap-1">
+            <div class="w-full rounded-t" style="height: 80%; background-color: var(--color-accent-orange); opacity: 0.5;"></div>
+            <span class="text-[9px]" style="color: var(--color-text-tertiary);">6.5</span>
+          </div>
+          <div class="flex flex-1 flex-col items-center gap-1">
+            <div class="w-full rounded-t" style="height: 75%; background-color: var(--color-accent-orange); opacity: 0.6;"></div>
+            <span class="text-[9px]" style="color: var(--color-text-tertiary);">6.10</span>
+          </div>
+          <div class="flex flex-1 flex-col items-center gap-1">
+            <div class="w-full rounded-t" style="height: 70%; background-color: var(--color-accent-orange); opacity: 0.6;"></div>
+            <span class="text-[9px]" style="color: var(--color-text-tertiary);">6.15</span>
+          </div>
+          <div class="flex flex-1 flex-col items-center gap-1">
+            <div class="w-full rounded-t" style="height: 65%; background-color: var(--color-accent-orange); opacity: 0.7;"></div>
+            <span class="text-[9px]" style="color: var(--color-text-tertiary);">6.20</span>
+          </div>
+          <div class="flex flex-1 flex-col items-center gap-1">
+            <div class="w-full rounded-t" style="height: 58%; background-color: var(--color-accent-orange); opacity: 0.8;"></div>
+            <span class="text-[9px]" style="color: var(--color-text-tertiary);">6.25</span>
+          </div>
+          <div class="flex flex-1 flex-col items-center gap-1">
+            <div class="w-full rounded-t" style="height: 50%; background-color: var(--color-accent-orange);"></div>
+            <span class="text-[9px] font-semibold" style="color: var(--color-accent-orange);">6.27</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Insight -->
+      <section class="mt-3 rounded-lg border p-4" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50); box-shadow: var(--shadow-card);">
+        <div class="flex items-start gap-2">
+          <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style="background-color: var(--color-primary);">
+            <i data-lucide="sparkles" class="h-4 w-4" style="color: var(--color-text-inverse);"></i>
+          </div>
+          <div>
+            <p class="text-[13px] font-semibold" style="color: var(--color-primary-700);">AI 趋势分析</p>
+            <p class="mt-1 text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">你的体重在过去 30 天内下降了 2.8 kg，下降趋势平稳健康。体脂率从 25.2% 降至 22.5%，肌肉量保持稳定。建议继续保持当前的饮食和运动计划，预计 2 周内可达到目标体重 70 kg。</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Page: Health Report (健康周报) -->
+  <div id="page-health-report" class="page">
+    <main class="px-4 pb-24">
+
+      <!-- Week Summary Header -->
+      <section class="py-4">
+        <div class="rounded-lg p-4" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); box-shadow: var(--shadow-elevated);">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-[13px] font-medium" style="color: rgba(255,255,255,0.8);">本周报告</p>
+              <p class="mt-1 text-[20px] font-bold" style="color: var(--color-text-inverse);">6.22 - 6.28</p>
+            </div>
+            <div class="flex h-12 w-12 items-center justify-center rounded-full" style="background-color: rgba(255,255,255,0.2);">
+              <i data-lucide="bar-chart-3" class="h-6 w-6" style="color: var(--color-text-inverse);"></i>
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-3 gap-3">
+            <div>
+              <p class="text-[11px]" style="color: rgba(255,255,255,0.7);">体重变化</p>
+              <div class="mt-0.5 flex items-baseline gap-0.5">
+                <span class="text-[18px] font-bold" style="color: var(--color-text-inverse);">-0.8</span>
+                <span class="text-[11px]" style="color: rgba(255,255,255,0.7);">kg</span>
+              </div>
+            </div>
+            <div>
+              <p class="text-[11px]" style="color: rgba(255,255,255,0.7);">日均摄入</p>
+              <div class="mt-0.5 flex items-baseline gap-0.5">
+                <span class="text-[18px] font-bold" style="color: var(--color-text-inverse);">1,420</span>
+                <span class="text-[11px]" style="color: rgba(255,255,255,0.7);">kcal</span>
+              </div>
+            </div>
+            <div>
+              <p class="text-[11px]" style="color: rgba(255,255,255,0.7);">运动天数</p>
+              <div class="mt-0.5 flex items-baseline gap-0.5">
+                <span class="text-[18px] font-bold" style="color: var(--color-text-inverse);">5</span>
+                <span class="text-[11px]" style="color: rgba(255,255,255,0.7);">天</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Weight Chart (Chart.js) -->
+      <section class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">体重变化</p>
+          <div class="flex items-center gap-1">
+            <i data-lucide="trending-down" class="h-3.5 w-3.5" style="color: var(--state-success);"></i>
+            <span class="text-[12px] font-medium" style="color: var(--state-success);">下降趋势</span>
+          </div>
+        </div>
+        <div style="height: 160px; position: relative;">
+          <canvas id="weightChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Nutrition Summary -->
+      <section class="mt-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <p class="text-[14px] font-semibold mb-3" style="color: var(--color-text-primary);">营养摄入分析</p>
+        <div class="flex flex-col gap-3">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="h-2.5 w-2.5 rounded-full" style="background-color: var(--color-accent-blue);"></span>
+                <span class="text-[13px]" style="color: var(--color-text-secondary);">蛋白质</span>
+              </div>
+              <span class="text-[13px] font-medium" style="color: var(--color-text-primary);">日均 68g</span>
+            </div>
+            <div class="h-2 w-full rounded-full" style="background-color: var(--color-border-light);">
+              <div class="h-2 rounded-full" style="width: 57%; background-color: var(--color-accent-blue);"></div>
+            </div>
+            <p class="mt-1 text-[11px]" style="color: var(--color-text-tertiary);">达标率 57% · 建议增加优质蛋白摄入</p>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="h-2.5 w-2.5 rounded-full" style="background-color: var(--color-accent-orange);"></span>
+                <span class="text-[13px]" style="color: var(--color-text-secondary);">碳水</span>
+              </div>
+              <span class="text-[13px] font-medium" style="color: var(--color-text-primary);">日均 155g</span>
+            </div>
+            <div class="h-2 w-full rounded-full" style="background-color: var(--color-border-light);">
+              <div class="h-2 rounded-full" style="width: 78%; background-color: var(--color-accent-orange);"></div>
+            </div>
+            <p class="mt-1 text-[11px]" style="color: var(--color-text-tertiary);">达标率 78% · 摄入比例合理</p>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="h-2.5 w-2.5 rounded-full" style="background-color: var(--color-accent-pink);"></span>
+                <span class="text-[13px]" style="color: var(--color-text-secondary);">脂肪</span>
+              </div>
+              <span class="text-[13px] font-medium" style="color: var(--color-text-primary);">日均 38g</span>
+            </div>
+            <div class="h-2 w-full rounded-full" style="background-color: var(--color-border-light);">
+              <div class="h-2 rounded-full" style="width: 63%; background-color: var(--color-accent-pink);"></div>
+            </div>
+            <p class="mt-1 text-[11px]" style="color: var(--color-text-tertiary);">达标率 63% · 控制良好</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Exercise Summary -->
+      <section class="mt-3 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">运动概览</p>
+          <span class="text-[12px]" style="color: var(--color-text-tertiary);">本周共 5 天</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="rounded-lg p-3" style="background-color: var(--color-primary-50);">
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="flame" class="h-4 w-4" style="color: var(--color-primary);"></i>
+              <span class="text-[12px]" style="color: var(--color-text-secondary);">总消耗</span>
+            </div>
+            <p class="mt-1 text-[20px] font-bold" style="color: var(--color-primary);">1,650<span class="text-[12px] font-normal" style="color: var(--color-text-tertiary);"> kcal</span></p>
+          </div>
+          <div class="rounded-lg p-3" style="background-color: var(--color-primary-50);">
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="clock" class="h-4 w-4" style="color: var(--color-primary);"></i>
+              <span class="text-[12px]" style="color: var(--color-text-secondary);">总时长</span>
+            </div>
+            <p class="mt-1 text-[20px] font-bold" style="color: var(--color-primary);">185<span class="text-[12px] font-normal" style="color: var(--color-text-tertiary);"> 分钟</span></p>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center gap-2">
+          <span class="text-[12px]" style="color: var(--color-text-tertiary);">运动类型：</span>
+          <span class="rounded-full px-2 py-0.5 text-[11px] font-medium" style="background-color: var(--color-primary-50); color: var(--color-primary-700);">跑步 3 次</span>
+          <span class="rounded-full px-2 py-0.5 text-[11px] font-medium" style="background-color: var(--color-primary-50); color: var(--color-primary-700);">力量 2 次</span>
+        </div>
+      </section>
+
+      <!-- AI Health Advice -->
+      <section class="mt-3 rounded-lg border p-4" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50); box-shadow: var(--shadow-card);">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="flex h-7 w-7 items-center justify-center rounded-full" style="background-color: var(--color-primary);">
+            <i data-lucide="sparkles" class="h-4 w-4" style="color: var(--color-text-inverse);"></i>
+          </div>
+          <p class="text-[14px] font-semibold" style="color: var(--color-primary-700);">AI 健康建议</p>
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-start gap-2">
+            <i data-lucide="check-circle-2" class="h-4 w-4 shrink-0 mt-0.5" style="color: var(--color-primary);"></i>
+            <p class="text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">本周体重下降 0.8 kg，节奏健康稳定，继续保持</p>
+          </div>
+          <div class="flex items-start gap-2">
+            <i data-lucide="alert-circle" class="h-4 w-4 shrink-0 mt-0.5" style="color: var(--state-warning);"></i>
+            <p class="text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">蛋白质摄入略低，建议每天增加 1-2 个鸡蛋或一份鸡胸肉</p>
+          </div>
+          <div class="flex items-start gap-2">
+            <i data-lucide="check-circle-2" class="h-4 w-4 shrink-0 mt-0.5" style="color: var(--color-primary);"></i>
+            <p class="text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">运动频率良好，建议下周增加一次瑜伽提升柔韧性</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Page: Add Exercise (添加运动记录) -->
+  <div id="page-add-exercise" class="page">
+    <main class="px-4 pb-24 pt-4">
+
+      <!-- Exercise Type Selector -->
+      <section>
+        <p class="text-[14px] font-semibold mb-3" style="color: var(--color-text-primary);">运动类型</p>
+        <div class="grid grid-cols-3 gap-2" data-select-group="single">
+          <button class="flex flex-col items-center gap-1.5 rounded-lg border-2 p-3 transition-opacity hover:opacity-90" style="border-color: var(--color-primary); background-color: var(--color-primary-50);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary);">
+              <i data-lucide="footprints" class="h-5 w-5" style="color: var(--color-text-inverse);"></i>
+            </div>
+            <span class="text-[12px] font-semibold" style="color: var(--color-primary-700);">跑步</span>
+          </button>
+          <button class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="dumbbell" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">力量训练</span>
+          </button>
+          <button class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="flower-2" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">瑜伽</span>
+          </button>
+          <button class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="bike" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">骑行</span>
+          </button>
+          <button class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="waves" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">游泳</span>
+          </button>
+          <button class="flex flex-col items-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full" style="background-color: var(--color-primary-50);">
+              <i data-lucide="plus" class="h-5 w-5" style="color: var(--color-primary-600);"></i>
+            </div>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">其他</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Duration Input -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-3" style="color: var(--color-text-primary);">运动时长</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center justify-between">
+            <button onclick="adjustExerciseDuration(-5)" class="flex h-10 w-10 items-center justify-center rounded-lg" style="background-color: var(--color-border-light); color: var(--color-text-tertiary);">
+              <i data-lucide="minus" class="h-5 w-5"></i>
+            </button>
+            <div class="text-center">
+              <div class="flex items-baseline gap-1">
+                <span id="exercise-duration" class="text-[32px] font-bold" style="color: var(--color-text-primary);">30</span>
+                <span class="text-[14px]" style="color: var(--color-text-tertiary);">分钟</span>
+              </div>
+            </div>
+            <button onclick="adjustExerciseDuration(5)" class="flex h-10 w-10 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50); color: var(--color-primary-700);">
+              <i data-lucide="plus" class="h-5 w-5"></i>
+            </button>
+          </div>
+          <div class="mt-3 flex items-center gap-2" data-select-group="single" data-select-style="bg">
+            <button class="flex-1 rounded-md py-1.5 text-[12px] font-medium" style="background-color: var(--color-border-light); color: var(--color-text-secondary);">15 min</button>
+            <button class="flex-1 rounded-md py-1.5 text-[12px] font-semibold" style="background-color: var(--color-primary); color: var(--color-text-inverse);">30 min</button>
+            <button class="flex-1 rounded-md py-1.5 text-[12px] font-medium" style="background-color: var(--color-border-light); color: var(--color-text-secondary);">45 min</button>
+            <button class="flex-1 rounded-md py-1.5 text-[12px] font-medium" style="background-color: var(--color-border-light); color: var(--color-text-secondary);">60 min</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Intensity Selector -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-3" style="color: var(--color-text-primary);">运动强度</p>
+        <div class="grid grid-cols-3 gap-2" data-select-group="single">
+          <button class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] py-2.5 text-center transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <p class="text-[13px] font-medium" style="color: var(--color-text-secondary);">低强度</p>
+            <p class="mt-0.5 text-[11px]" style="color: var(--color-text-tertiary);">心率 90-110</p>
+          </button>
+          <button class="rounded-lg border-2 py-2.5 text-center transition-opacity hover:opacity-90" style="border-color: var(--color-primary); background-color: var(--color-primary-50);">
+            <p class="text-[13px] font-semibold" style="color: var(--color-primary-700);">中强度</p>
+            <p class="mt-0.5 text-[11px]" style="color: var(--color-primary);">心率 120-140</p>
+          </button>
+          <button class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] py-2.5 text-center transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <p class="text-[13px] font-medium" style="color: var(--color-text-secondary);">高强度</p>
+            <p class="mt-0.5 text-[11px]" style="color: var(--color-text-tertiary);">心率 150-170</p>
+          </button>
+        </div>
+      </section>
+
+      <!-- Calorie Estimate -->
+      <section class="mt-4">
+        <div class="rounded-lg p-4" style="background: linear-gradient(135deg, var(--color-primary-50), var(--color-primary-100));">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="flame" class="h-5 w-5" style="color: var(--color-primary);"></i>
+              <span class="text-[14px] font-medium" style="color: var(--color-text-secondary);">预计消耗</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span id="exercise-calorie" class="text-[24px] font-bold" style="color: var(--color-primary);">320</span>
+              <span class="text-[13px]" style="color: var(--color-text-tertiary);">kcal</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Note Input -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-3" style="color: var(--color-text-primary);">备注 (选填)</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3" style="box-shadow: var(--shadow-card);">
+          <textarea rows="3" placeholder="记录今天的运动感受..." class="w-full bg-transparent text-[14px] outline-none resize-none" style="color: var(--color-text-primary);"></textarea>
+        </div>
+      </section>
+
+      <!-- Save Button -->
+      <section class="mt-6">
+        <button onclick="saveExercise()" class="w-full flex h-12 items-center justify-center rounded-lg text-[15px] font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+          <i data-lucide="check" class="h-5 w-5"></i>
+          <span class="ml-1">保存记录</span>
+        </button>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Page: Enterprise Dashboard (企业管理看板) -->
+  <div id="page-enterprise" class="page">
+    <main class="px-4 pb-32 pt-4">
+
+      <!-- HR Badge -->
+      <section class="mb-4">
+        <div class="flex items-center gap-2 rounded-lg border border-[var(--color-primary-200)] bg-[var(--color-primary-50)] px-3 py-2">
+          <i data-lucide="shield-check" class="h-4 w-4" style="color: var(--color-primary-700);"></i>
+          <span class="text-[13px] font-medium" style="color: var(--color-primary-700);">企业管理员 · 某某科技有限公司</span>
+        </div>
+      </section>
+
+      <!-- KPI Cards -->
+      <section class="grid grid-cols-2 gap-3">
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="users" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+            </div>
+            <p class="text-[12px]" style="color: var(--color-text-secondary);">参与率</p>
+          </div>
+          <p class="mt-2 text-[24px] font-bold" style="color: var(--color-text-primary);">87<span class="text-[14px] font-normal" style="color: var(--color-text-tertiary);">%</span></p>
+          <p class="mt-1 text-[11px]" style="color: var(--state-success);">较上周 +5%</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="trending-down" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+            </div>
+            <p class="text-[12px]" style="color: var(--color-text-secondary);">人均减重</p>
+          </div>
+          <p class="mt-2 text-[24px] font-bold" style="color: var(--color-text-primary);">2.1<span class="text-[14px] font-normal" style="color: var(--color-text-tertiary);"> kg</span></p>
+          <p class="mt-1 text-[11px]" style="color: var(--state-success);">本月累计</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="heart-pulse" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+            </div>
+            <p class="text-[12px]" style="color: var(--color-text-secondary);">健康评分</p>
+          </div>
+          <p class="mt-2 text-[24px] font-bold" style="color: var(--color-text-primary);">82<span class="text-[14px] font-normal" style="color: var(--color-text-tertiary);"> /100</span></p>
+          <p class="mt-1 text-[11px]" style="color: var(--state-success);">良好水平</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+              <i data-lucide="activity" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+            </div>
+            <p class="text-[12px]" style="color: var(--color-text-secondary);">活跃用户</p>
+          </div>
+          <p class="mt-2 text-[24px] font-bold" style="color: var(--color-text-primary);">156<span class="text-[14px] font-normal" style="color: var(--color-text-tertiary);"> 人</span></p>
+          <p class="mt-1 text-[11px]" style="color: var(--color-text-tertiary);">总 180 人</p>
+        </div>
+      </section>
+
+      <!-- Department Ranking -->
+      <section class="mt-4 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">部门排名</p>
+          <span class="text-[12px]" style="color: var(--color-text-tertiary);">按人均减重</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-bold" style="background-color: var(--color-accent-orange); color: var(--color-text-inverse);">1</span>
+            <span class="flex-1 text-[14px] font-medium" style="color: var(--color-text-primary);">研发部</span>
+            <span class="text-[14px] font-bold" style="color: var(--color-primary);">3.2 kg</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-bold" style="background-color: var(--color-accent-blue); color: var(--color-text-inverse);">2</span>
+            <span class="flex-1 text-[14px] font-medium" style="color: var(--color-text-primary);">市场部</span>
+            <span class="text-[14px] font-bold" style="color: var(--color-primary);">2.8 kg</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-bold" style="background-color: var(--color-accent-pink); color: var(--color-text-inverse);">3</span>
+            <span class="flex-1 text-[14px] font-medium" style="color: var(--color-text-primary);">运营部</span>
+            <span class="text-[14px] font-bold" style="color: var(--color-primary);">2.5 kg</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-medium" style="background-color: var(--color-border-light); color: var(--color-text-tertiary);">4</span>
+            <span class="flex-1 text-[14px] font-medium" style="color: var(--color-text-primary);">财务部</span>
+            <span class="text-[14px] font-medium" style="color: var(--color-text-secondary);">1.9 kg</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-medium" style="background-color: var(--color-border-light); color: var(--color-text-tertiary);">5</span>
+            <span class="flex-1 text-[14px] font-medium" style="color: var(--color-text-primary);">人事部</span>
+            <span class="text-[14px] font-medium" style="color: var(--color-text-secondary);">1.5 kg</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Health Trend Chart -->
+      <section class="mt-4 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">全员健康趋势</p>
+          <span class="text-[12px]" style="color: var(--color-text-tertiary);">近 4 周</span>
+        </div>
+        <svg viewBox="0 0 320 120" class="w-full" style="height: 120px;">
+          <line x1="0" y1="20" x2="320" y2="20" stroke="var(--color-border-light)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="0" y1="60" x2="320" y2="60" stroke="var(--color-border-light)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="0" y1="100" x2="320" y2="100" stroke="var(--color-border-light)" stroke-width="1" stroke-dasharray="4 4"/>
+          <path d="M20,80 L80,70 L140,55 L200,45 L260,35 L300,30 L300,110 L20,110 Z" fill="var(--color-primary)" fill-opacity="0.1"/>
+          <path d="M20,80 L80,70 L140,55 L200,45 L260,35 L300,30" stroke="var(--color-primary)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="80" r="3" fill="var(--color-primary)"/>
+          <circle cx="80" cy="70" r="3" fill="var(--color-primary)"/>
+          <circle cx="140" cy="55" r="3" fill="var(--color-primary)"/>
+          <circle cx="200" cy="45" r="3" fill="var(--color-primary)"/>
+          <circle cx="260" cy="35" r="3" fill="var(--color-primary)"/>
+          <circle cx="300" cy="30" r="4" fill="var(--color-primary)" stroke="var(--color-surface)" stroke-width="2"/>
+          <text x="14" y="118" font-size="9" fill="var(--color-text-tertiary)">W1</text>
+          <text x="74" y="118" font-size="9" fill="var(--color-text-tertiary)">W2</text>
+          <text x="134" y="118" font-size="9" fill="var(--color-text-tertiary)">W3</text>
+          <text x="194" y="118" font-size="9" fill="var(--color-text-tertiary)">W4</text>
+        </svg>
+      </section>
+
+      <!-- Active Challenges -->
+      <section class="mt-4 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">进行中的活动</p>
+          <span class="text-[12px]" style="color: var(--color-primary);">2 个</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          <div class="rounded-lg p-3" style="background-color: var(--color-primary-50);">
+            <div class="flex items-center justify-between">
+              <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">21天减脂挑战赛</p>
+              <span class="rounded-full px-2 py-0.5 text-[11px] font-medium" style="background-color: var(--color-primary); color: var(--color-text-inverse);">进行中</span>
+            </div>
+            <div class="mt-2 flex items-center gap-3 text-[12px]" style="color: var(--color-text-tertiary);">
+              <span class="flex items-center gap-1"><i data-lucide="users" class="h-3 w-3"></i>124 人参与</span>
+              <span class="flex items-center gap-1"><i data-lucide="calendar" class="h-3 w-3"></i>第 14 天</span>
+            </div>
+            <div class="mt-2 h-1.5 w-full rounded-full" style="background-color: var(--color-primary-200);">
+              <div class="h-1.5 rounded-full" style="width: 67%; background-color: var(--color-primary);"></div>
+            </div>
+          </div>
+          <div class="rounded-lg p-3" style="background-color: var(--color-primary-50);">
+            <div class="flex items-center justify-between">
+              <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">步数达人周赛</p>
+              <span class="rounded-full px-2 py-0.5 text-[11px] font-medium" style="background-color: var(--color-primary); color: var(--color-text-inverse);">进行中</span>
+            </div>
+            <div class="mt-2 flex items-center gap-3 text-[12px]" style="color: var(--color-text-tertiary);">
+              <span class="flex items-center gap-1"><i data-lucide="users" class="h-3 w-3"></i>98 人参与</span>
+              <span class="flex items-center gap-1"><i data-lucide="calendar" class="h-3 w-3"></i>第 5 天</span>
+            </div>
+            <div class="mt-2 h-1.5 w-full rounded-full" style="background-color: var(--color-primary-200);">
+              <div class="h-1.5 rounded-full" style="width: 71%; background-color: var(--color-primary);"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Health Alert -->
+      <section class="mt-4 rounded-lg border p-4" style="border-color: var(--state-warning); background-color: #FFFBEB;">
+        <div class="flex items-start gap-2">
+          <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style="background-color: var(--state-warning);">
+            <i data-lucide="alert-triangle" class="h-4 w-4" style="color: var(--color-text-inverse);"></i>
+          </div>
+          <div>
+            <p class="text-[13px] font-semibold" style="color: #92400E;">健康预警</p>
+            <p class="mt-1 text-[13px] leading-relaxed" style="color: var(--color-text-secondary);">财务部有 3 名员工连续 7 天未记录健康数据，建议推送提醒公告。</p>
+            <button onclick="navigateTo('push-notice')" class="mt-2 flex items-center gap-1 text-[12px] font-medium" style="color: var(--state-warning);">
+              <span>立即推送</span>
+              <i data-lucide="arrow-right" class="h-3 w-3"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Action Bar (within page flow, above tab bar) -->
+    <div class="sticky bottom-[84px] flex items-center gap-2 border-t border-[var(--color-border-light)] bg-[var(--color-surface)] px-4 py-3">
+      <button onclick="navigateTo('push-notice')" class="flex-1 flex h-10 items-center justify-center gap-1.5 rounded-lg text-[14px] font-medium transition-opacity hover:opacity-90" style="border: 1px solid var(--color-primary); color: var(--color-primary); background-color: transparent;">
+        <i data-lucide="send" class="h-4 w-4"></i>
+        <span>推送健康公告</span>
+      </button>
+      <button onclick="navigateTo('publish-activity')" class="flex-1 flex h-10 items-center justify-center gap-1.5 rounded-lg text-[14px] font-semibold transition-opacity hover:opacity-90" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+        <i data-lucide="megaphone" class="h-4 w-4"></i>
+        <span>发布新活动</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Page: Publish Activity (发布减脂活动) -->
+  <div id="page-publish-activity" class="page">
+    <main class="px-4 pb-24 pt-4">
+
+      <!-- Activity Name -->
+      <section>
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">活动名称</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] px-3 py-2.5" style="box-shadow: var(--shadow-card);">
+          <input type="text" value="21天减脂挑战赛" class="w-full bg-transparent text-[14px] outline-none" style="color: var(--color-text-primary);">
+        </div>
+      </section>
+
+      <!-- Activity Type -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">活动类型</p>
+        <div class="grid grid-cols-2 gap-2" data-select-group="single">
+          <button class="flex items-center gap-2 rounded-lg border-2 px-3 py-2.5 transition-opacity hover:opacity-90" style="border-color: var(--color-primary); background-color: var(--color-primary-50);">
+            <i data-lucide="trending-down" class="h-4 w-4" style="color: var(--color-primary);"></i>
+            <span class="text-[13px] font-semibold" style="color: var(--color-primary-700);">减脂挑战</span>
+          </button>
+          <button class="flex items-center gap-2 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] px-3 py-2.5 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <i data-lucide="footprints" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+            <span class="text-[13px] font-medium" style="color: var(--color-text-secondary);">步数竞赛</span>
+          </button>
+          <button class="flex items-center gap-2 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] px-3 py-2.5 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <i data-lucide="dumbbell" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+            <span class="text-[13px] font-medium" style="color: var(--color-text-secondary);">运动打卡</span>
+          </button>
+          <button class="flex items-center gap-2 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] px-3 py-2.5 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <i data-lucide="utensils" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+            <span class="text-[13px] font-medium" style="color: var(--color-text-secondary);">健康饮食</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Activity Period -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">活动周期</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-[11px]" style="color: var(--color-text-tertiary);">开始日期</p>
+              <p class="mt-1 text-[15px] font-semibold" style="color: var(--color-text-primary);">2024.07.01</p>
+            </div>
+            <i data-lucide="arrow-right" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+            <div class="text-right">
+              <p class="text-[11px]" style="color: var(--color-text-tertiary);">结束日期</p>
+              <p class="mt-1 text-[15px] font-semibold" style="color: var(--color-text-primary);">2024.07.21</p>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center gap-2">
+            <span class="text-[12px]" style="color: var(--color-text-tertiary);">共</span>
+            <span class="text-[14px] font-bold" style="color: var(--color-primary);">21 天</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Participation Scope -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">参与范围</p>
+        <div class="flex flex-wrap gap-2" data-select-group="multi">
+          <button class="rounded-full px-4 py-1.5 text-[13px] font-semibold transition-opacity hover:opacity-90" style="background-color: var(--color-primary); color: var(--color-text-inverse);">全员</button>
+          <button class="rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[13px] font-medium transition-opacity hover:opacity-90" style="color: var(--color-text-secondary); background-color: var(--color-surface);">研发部</button>
+          <button class="rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[13px] font-medium transition-opacity hover:opacity-90" style="color: var(--color-text-secondary); background-color: var(--color-surface);">市场部</button>
+          <button class="rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[13px] font-medium transition-opacity hover:opacity-90" style="color: var(--color-text-secondary); background-color: var(--color-surface);">运营部</button>
+          <button class="rounded-full border border-dashed border-[var(--color-border)] px-4 py-1.5 text-[13px] font-medium transition-opacity hover:opacity-90" style="color: var(--color-text-tertiary); background-color: var(--color-surface);">+ 自定义</button>
+        </div>
+      </section>
+
+      <!-- Activity Description -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">活动说明</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3" style="box-shadow: var(--shadow-card);">
+          <textarea rows="4" class="w-full bg-transparent text-[14px] outline-none resize-none" style="color: var(--color-text-primary);">挑战 21 天内减脂 2 kg，每天记录体重和饮食，完成每日运动打卡。让我们一起变得更健康！</textarea>
+        </div>
+      </section>
+
+      <!-- Reward Setting -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">奖励设置</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+                <i data-lucide="gift" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+              </div>
+              <span class="text-[14px] font-medium" style="color: var(--color-text-primary);">达标奖励</span>
+            </div>
+            <span class="text-[14px] font-bold" style="color: var(--color-primary);">运动手环 x3</span>
+          </div>
+          <div class="mt-3 h-px w-full" style="background-color: var(--color-border-light);"></div>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+                <i data-lucide="trophy" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+              </div>
+              <span class="text-[14px] font-medium" style="color: var(--color-text-primary);">第一名奖励</span>
+            </div>
+            <span class="text-[14px] font-bold" style="color: var(--color-primary);">500 元购物卡</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <section class="mt-6 flex items-center gap-3">
+        <button onclick="goBack()" class="flex-1 flex h-12 items-center justify-center rounded-lg text-[15px] font-medium transition-opacity hover:opacity-90" style="border: 1px solid var(--color-border); color: var(--color-text-secondary); background-color: var(--color-surface);">
+          取消
+        </button>
+        <button onclick="publishActivity()" class="flex-1 flex h-12 items-center justify-center rounded-lg text-[15px] font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+          <i data-lucide="megaphone" class="h-5 w-5"></i>
+          <span class="ml-1">发布活动</span>
+        </button>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Page: Push Notice (推送健康公告) -->
+  <div id="page-push-notice" class="page">
+    <main class="px-4 pb-24 pt-4">
+
+      <!-- Notice Title -->
+      <section>
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">公告标题</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] px-3 py-2.5" style="box-shadow: var(--shadow-card);">
+          <input type="text" value="7月健康减脂主题活动通知" class="w-full bg-transparent text-[14px] outline-none" style="color: var(--color-text-primary);">
+        </div>
+      </section>
+
+      <!-- Notice Type -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">公告类型</p>
+        <div class="grid grid-cols-3 gap-2" data-select-group="single">
+          <button class="flex items-center justify-center gap-1.5 rounded-lg border-2 px-2 py-2.5 transition-opacity hover:opacity-90" style="border-color: var(--color-primary); background-color: var(--color-primary-50);">
+            <i data-lucide="megaphone" class="h-4 w-4" style="color: var(--color-primary);"></i>
+            <span class="text-[12px] font-semibold" style="color: var(--color-primary-700);">活动通知</span>
+          </button>
+          <button class="flex items-center justify-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] px-2 py-2.5 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <i data-lucide="heart-pulse" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">健康提醒</span>
+          </button>
+          <button class="flex items-center justify-center gap-1.5 rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] px-2 py-2.5 transition-opacity hover:opacity-90" style="box-shadow: var(--shadow-card);">
+            <i data-lucide="info" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+            <span class="text-[12px] font-medium" style="color: var(--color-text-secondary);">一般公告</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Push Scope -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">推送范围</p>
+        <div class="flex flex-wrap gap-2" data-select-group="multi">
+          <button class="rounded-full px-4 py-1.5 text-[13px] font-semibold transition-opacity hover:opacity-90" style="background-color: var(--color-primary); color: var(--color-text-inverse);">全员</button>
+          <button class="rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[13px] font-medium transition-opacity hover:opacity-90" style="color: var(--color-text-secondary); background-color: var(--color-surface);">研发部</button>
+          <button class="rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[13px] font-medium transition-opacity hover:opacity-90" style="color: var(--color-text-secondary); background-color: var(--color-surface);">市场部</button>
+          <button class="rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[13px] font-medium transition-opacity hover:opacity-90" style="color: var(--color-text-secondary); background-color: var(--color-surface);">运营部</button>
+        </div>
+        <p class="mt-2 text-[12px]" style="color: var(--color-text-tertiary);">将推送给 180 名员工</p>
+      </section>
+
+      <!-- Notice Content -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">公告内容</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-3" style="box-shadow: var(--shadow-card);">
+          <textarea rows="5" class="w-full bg-transparent text-[14px] outline-none resize-none leading-relaxed" style="color: var(--color-text-primary);">各位同事：
+
+公司将于 7 月开展"健康减脂月"主题活动，鼓励大家积极参与健康管理。
+
+活动内容：
+1. 21天减脂挑战赛（7.1-7.21）
+2. 每日步数打卡挑战
+3. 健康饮食知识分享会
+
+参与方式：在 App 内报名参加，完成每日打卡即可获得积分奖励。
+
+让我们一起行动起来，拥抱健康生活！</textarea>
+        </div>
+      </section>
+
+      <!-- Attachment -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">附件 (选填)</p>
+        <button class="flex w-full items-center gap-3 rounded-lg border border-dashed border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 transition-opacity hover:opacity-90">
+          <div class="flex h-9 w-9 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50);">
+            <i data-lucide="paperclip" class="h-4 w-4" style="color: var(--color-primary-600);"></i>
+          </div>
+          <div class="text-left">
+            <p class="text-[13px] font-medium" style="color: var(--color-text-primary);">添加附件</p>
+            <p class="text-[11px]" style="color: var(--color-text-tertiary);">支持图片、PDF、文档</p>
+          </div>
+        </button>
+      </section>
+
+      <!-- Preview Card -->
+      <section class="mt-4">
+        <p class="text-[14px] font-semibold mb-2" style="color: var(--color-text-primary);">推送预览</p>
+        <div class="rounded-lg border border-[var(--color-border-light)] bg-[var(--color-surface)] p-4" style="box-shadow: var(--shadow-card);">
+          <div class="flex items-start gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style="background-color: var(--color-primary);">
+              <i data-lucide="megaphone" class="h-5 w-5" style="color: var(--color-text-inverse);"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <p class="text-[14px] font-semibold" style="color: var(--color-text-primary);">AI减脂助手</p>
+                <span class="text-[11px]" style="color: var(--color-text-tertiary);">刚刚</span>
+              </div>
+              <p class="mt-1 text-[13px] font-medium" style="color: var(--color-text-primary);">7月健康减脂主题活动通知</p>
+              <p class="mt-0.5 text-[12px] leading-relaxed" style="color: var(--color-text-secondary);">各位同事：公司将于7月开展"健康减脂月"主题活动...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <section class="mt-6 flex items-center gap-3">
+        <button onclick="goBack()" class="flex-1 flex h-12 items-center justify-center rounded-lg text-[15px] font-medium transition-opacity hover:opacity-90" style="border: 1px solid var(--color-border); color: var(--color-text-secondary); background-color: var(--color-surface);">
+          取消
+        </button>
+        <button onclick="pushNotice()" class="flex-1 flex h-12 items-center justify-center rounded-lg text-[15px] font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+          <i data-lucide="send" class="h-5 w-5"></i>
+          <span class="ml-1">立即推送</span>
+        </button>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============ END PAGES ============ -->
+
+  <!-- Bottom Tab Bar -->
+  <nav class="fixed bottom-0 inset-x-0 z-40 border-t border-[var(--color-border)] bg-[var(--color-surface)]">
+    <div class="flex h-[50px] items-center justify-around">
+      <button class="tab-btn flex flex-col items-center justify-center gap-0.5" data-tab="home" onclick="switchTab('home')" style="color: var(--color-primary);">
+        <i data-lucide="home" class="h-5 w-5"></i>
+        <span class="text-[10px] font-semibold">首页</span>
+      </button>
+      <button class="tab-btn flex flex-col items-center justify-center gap-0.5" data-tab="meal" onclick="switchTab('meal')" style="color: var(--color-text-tertiary);">
+        <i data-lucide="utensils" class="h-5 w-5"></i>
+        <span class="text-[10px] font-medium">饮食</span>
+      </button>
+      <button class="tab-btn flex flex-col items-center justify-center gap-0.5" data-tab="exercise" onclick="switchTab('exercise')" style="color: var(--color-text-tertiary);">
+        <i data-lucide="activity" class="h-5 w-5"></i>
+        <span class="text-[10px] font-medium">运动</span>
+      </button>
+      <button class="tab-btn flex flex-col items-center justify-center gap-0.5" data-tab="ai" onclick="switchTab('ai')" style="color: var(--color-text-tertiary);">
+        <i data-lucide="bot" class="h-5 w-5"></i>
+        <span class="text-[10px] font-medium">AI</span>
+      </button>
+      <button class="tab-btn flex flex-col items-center justify-center gap-0.5" data-tab="mine" onclick="switchTab('mine')" style="color: var(--color-text-tertiary);">
+        <i data-lucide="circle-user-round" class="h-5 w-5"></i>
+        <span class="text-[10px] font-medium">我的</span>
+      </button>
+    </div>
+    <!-- Safe Area Bottom -->
+    <div class="h-[env(safe-area-inset-bottom,34px)]"></div>
+  </nav>
+
+  <!-- Modal: Record Weight (记录体重弹窗) -->
+  <div id="modal-weight" class="fixed inset-0 z-50 modal-hidden">
+    <div class="absolute inset-0" style="background: rgba(0,0,0,0.4);" onclick="closeWeightModal()"></div>
+    <div class="absolute bottom-0 inset-x-0 flex flex-col" style="background: var(--color-surface); border-radius: var(--radius-xl) var(--radius-xl) 0 0; max-height: 60vh; box-shadow: var(--shadow-float);">
+      <!-- Drag Handle -->
+      <div class="flex justify-center pt-2 pb-1">
+        <div class="h-1 w-10 rounded-full" style="background-color: var(--color-border);"></div>
+      </div>
+
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-4 py-3">
+        <p class="text-[16px] font-semibold" style="color: var(--color-text-primary);">记录体重</p>
+        <button onclick="closeWeightModal()" class="flex h-8 w-8 items-center justify-center rounded-lg" style="color: var(--color-text-tertiary);" aria-label="关闭">
+          <i data-lucide="x" class="h-5 w-5"></i>
+        </button>
+      </div>
+
+      <!-- Weight Input Display -->
+      <div class="px-4 pb-4 overflow-y-auto">
+        <div class="flex flex-col items-center py-4">
+          <p class="text-[13px]" style="color: var(--color-text-tertiary);">今日体重</p>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span id="modal-weight-value" class="text-[48px] font-bold leading-none tracking-tight" style="color: var(--color-text-primary);">72.5</span>
+            <span class="text-[18px] font-medium" style="color: var(--color-text-tertiary);">kg</span>
+          </div>
+          <p class="mt-2 text-[12px]" style="color: var(--color-text-tertiary);">2024年6月27日 08:30</p>
+        </div>
+
+        <!-- Quick Adjust Buttons -->
+        <div class="flex items-center justify-center gap-3 mb-4">
+          <button onclick="adjustModalWeight(-0.1)" class="flex h-10 w-10 items-center justify-center rounded-lg" style="background-color: var(--color-border-light); color: var(--color-text-secondary);">
+            <i data-lucide="minus" class="h-5 w-5"></i>
+          </button>
+          <span class="text-[13px]" style="color: var(--color-text-tertiary);">0.1 kg</span>
+          <button onclick="adjustModalWeight(0.1)" class="flex h-10 w-10 items-center justify-center rounded-lg" style="background-color: var(--color-primary-50); color: var(--color-primary-700);">
+            <i data-lucide="plus" class="h-5 w-5"></i>
+          </button>
+        </div>
+
+        <!-- Body Fat Input (Optional) -->
+        <div class="rounded-lg border border-[var(--color-border-light)] p-3 mb-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="percent" class="h-4 w-4" style="color: var(--color-text-tertiary);"></i>
+              <span class="text-[13px]" style="color: var(--color-text-secondary);">体脂率 (选填)</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span id="modal-bodyfat-value" class="text-[18px] font-bold" style="color: var(--color-text-primary);">22.5</span>
+              <span class="text-[13px]" style="color: var(--color-text-tertiary);">%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparison with Yesterday -->
+        <div class="flex items-center justify-center gap-2 mb-4">
+          <i data-lucide="trending-down" class="h-4 w-4" style="color: var(--state-success);"></i>
+          <span id="modal-weight-diff" class="text-[13px] font-medium" style="color: var(--state-success);">较昨日 -0.3 kg</span>
+        </div>
+
+        <!-- Save Button -->
+        <button onclick="saveWeight()" class="w-full flex h-12 items-center justify-center rounded-lg text-[15px] font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]" style="background-color: var(--color-primary); color: var(--color-text-inverse);">
+          <i data-lucide="check" class="h-5 w-5"></i>
+          <span class="ml-1">保存记录</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    // Page titles mapping
+    const pageTitles = {
+      'home': '今日概览',
+      'meal': '饮食记录',
+      'exercise': '运动记录',
+      'ai': 'AI 健康顾问',
+      'mine': '我的',
+      'weight-trend': '体重趋势',
+      'health-report': '健康周报',
+      'add-exercise': '添加运动',
+      'enterprise': '企业健康看板',
+      'publish-activity': '发布减脂活动',
+      'push-notice': '推送健康公告'
+    };
+
+    // Tab pages (no back button)
+    const tabPages = ['home', 'meal', 'exercise', 'ai', 'mine'];
+
+    // Map subpages to their parent tab for tab bar highlighting
+    const tabPageMap = {
+      'home': 'home',
+      'meal': 'meal',
+      'exercise': 'exercise',
+      'ai': 'ai',
+      'mine': 'mine',
+      'weight-trend': 'home',
+      'health-report': 'home',
+      'add-exercise': 'exercise',
+      'enterprise': 'mine',
+      'publish-activity': 'mine',
+      'push-notice': 'mine'
+    };
+
+    // Navigation history stack
+    let navStack = ['home'];
+    let healthChartInited = false;
+
+    function switchPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      // Show target page
+      const target = document.getElementById('page-' + pageId);
+      if (target) target.classList.add('active');
+
+      // Update title
+      document.getElementById('nav-title').textContent = pageTitles[pageId] || pageId;
+
+      // Update back button visibility
+      const isTab = tabPages.includes(pageId);
+      const backBtn = document.getElementById('nav-back');
+      if (isTab) {
+        backBtn.classList.add('hidden');
+        navStack = [pageId];
+      } else {
+        backBtn.classList.remove('hidden');
+        if (navStack[navStack.length - 1] !== pageId) {
+          navStack.push(pageId);
+        }
+      }
+
+      // Update tab bar highlight
+      updateTabBar(pageId);
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+
+      // Re-init icons
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      // Initialize health chart if needed
+      if (pageId === 'health-report') {
+        setTimeout(initHealthChart, 150);
+      }
+    }
+
+    function switchTab(tabId) {
+      switchPage(tabId);
+    }
+
+    function navigateTo(pageId) {
+      switchPage(pageId);
+    }
+
+    function goBack() {
+      if (navStack.length > 1) {
+        navStack.pop();
+        const prev = navStack[navStack.length - 1];
+        // Show previous page without pushing to stack
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById('page-' + prev);
+        if (target) target.classList.add('active');
+        document.getElementById('nav-title').textContent = pageTitles[prev] || prev;
+        const isTab = tabPages.includes(prev);
+        const backBtn = document.getElementById('nav-back');
+        if (isTab) {
+          backBtn.classList.add('hidden');
+          navStack = [prev];
+        } else {
+          backBtn.classList.remove('hidden');
+        }
+        updateTabBar(prev);
+        window.scrollTo(0, 0);
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      } else {
+        switchPage('home');
+      }
+    }
+
+    function updateTabBar(pageId) {
+      const activeTab = tabPageMap[pageId] || 'home';
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const isActive = btn.dataset.tab === activeTab;
+        btn.style.color = isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)';
+        const span = btn.querySelector('span');
+        if (span) span.style.fontWeight = isActive ? '600' : '500';
+      });
+    }
+
+    // Modal: Record Weight
+    function openWeightModal() {
+      document.getElementById('modal-weight').classList.remove('modal-hidden');
+      document.body.style.overflow = 'hidden';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function closeWeightModal() {
+      document.getElementById('modal-weight').classList.add('modal-hidden');
+      document.body.style.overflow = '';
+    }
+
+    // Health Report Chart
+    function initHealthChart() {
+      if (healthChartInited || typeof Chart === 'undefined') return;
+      const canvas = document.getElementById('weightChart');
+      if (!canvas) return;
+      healthChartInited = true;
+
+      const ctx = canvas.getContext('2d');
+      const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#22C55E';
+      const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim() || '#E5E7EB';
+      const textTertiary = getComputedStyle(document.documentElement).getPropertyValue('--color-text-tertiary').trim() || '#9CA3AF';
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+          datasets: [
+            {
+              label: '体重 (kg)',
+              data: [73.2, 73.0, 72.8, 72.9, 72.7, 72.6, 72.5],
+              borderColor: primaryColor,
+              backgroundColor: primaryColor + '1A',
+              borderWidth: 2,
+              pointBackgroundColor: primaryColor,
+              pointBorderColor: function(context) {
+                return context.dataIndex === 6 ? '#FFFFFF' : primaryColor;
+              },
+              pointBorderWidth: function(context) {
+                return context.dataIndex === 6 ? 3 : 1.5;
+              },
+              pointRadius: function(context) {
+                return context.dataIndex === 6 ? 5 : 3;
+              },
+              tension: 0.3,
+              fill: true,
+            },
+            {
+              label: '目标',
+              data: [70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0],
+              borderColor: borderColor,
+              borderWidth: 1.5,
+              borderDash: [6, 4],
+              pointRadius: 0,
+              fill: false,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              align: 'end',
+              labels: {
+                boxWidth: 12,
+                boxHeight: 2,
+                padding: 12,
+                font: { size: 11, family: "'DM Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif" },
+                color: textTertiary,
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  if (context.datasetIndex === 0) return ' ' + context.parsed.y.toFixed(1) + ' kg';
+                  return ' 目标: ' + context.parsed.y.toFixed(1) + ' kg';
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              min: 69.5,
+              max: 74,
+              ticks: {
+                stepSize: 1,
+                font: { size: 11, family: "'DM Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif" },
+                color: textTertiary,
+                callback: function(value) { return value.toFixed(0); }
+              },
+              grid: { color: borderColor, drawBorder: false },
+              border: { display: false },
+            },
+            x: {
+              ticks: {
+                font: { size: 11, family: "'DM Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif" },
+                color: textTertiary,
+              },
+              grid: { display: false },
+              border: { display: false },
+            }
+          }
+        }
+      });
+    }
+
+    // === Toast ===
+    function showToast(msg, duration) {
+      duration = duration || 1800;
+      var t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function() { t.classList.remove('show'); }, duration);
+    }
+
+    // === Water Intake ===
+    var waterAmount = 1250;
+    var waterGoal = 2000;
+    function adjustWater(delta) {
+      waterAmount = Math.max(0, Math.min(waterGoal, waterAmount + delta));
+      var amountEl = document.getElementById('water-amount');
+      if (amountEl) amountEl.textContent = waterAmount.toLocaleString() + 'ml';
+      var cupsEl = document.getElementById('water-cups');
+      if (cupsEl) {
+        var cups = cupsEl.querySelectorAll('i');
+        var filled = Math.round(waterAmount / 250);
+        cups.forEach(function(cup, i) {
+          cup.style.color = i < filled ? 'var(--color-accent-blue)' : 'var(--color-border-light)';
+        });
+      }
+      showToast(delta > 0 ? '已记录饮水 250ml' : '已减少饮水 250ml');
+    }
+
+    // === AI Chat ===
+    function sendQuickQuestion(btn) {
+      var text = btn.querySelector('span').textContent;
+      var input = document.getElementById('ai-input');
+      if (input) input.value = text;
+      sendAIMessage();
+    }
+    function sendAIMessage() {
+      var input = document.getElementById('ai-input');
+      if (!input || !input.value.trim()) return;
+      var text = input.value.trim();
+      var chat = document.getElementById('ai-chat');
+      if (!chat) return;
+      // 移除typing indicator（如果有）
+      var typing = chat.querySelector('.typing-indicator');
+      if (typing) typing.remove();
+      // 添加用户消息
+      var userMsg = document.createElement('div');
+      userMsg.className = 'flex justify-end';
+      userMsg.innerHTML = '<div class="max-w-[80%] rounded-2xl rounded-tr-md px-3.5 py-2.5 text-[14px]" style="background-color: var(--color-primary); color: var(--color-text-inverse);"><p>' + escapeHtml(text) + '</p></div>';
+      chat.appendChild(userMsg);
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
+      // 添加typing indicator
+      var typingEl = document.createElement('div');
+      typingEl.className = 'typing-indicator mt-3 flex justify-start';
+      typingEl.innerHTML = '<div class="flex gap-2"><div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style="background-color: var(--color-primary-100);"><i data-lucide="bot" class="h-4 w-4" style="color: var(--color-primary-700);"></i></div><div class="rounded-2xl rounded-tl-md border border-[var(--color-border-light)] bg-[var(--color-surface)] px-4 py-3" style="box-shadow: var(--shadow-card);"><div class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full" style="background-color: var(--color-text-tertiary); animation: blink 1.4s infinite;"></span><span class="h-1.5 w-1.5 rounded-full" style="background-color: var(--color-text-tertiary); animation: blink 1.4s infinite 0.2s;"></span><span class="h-1.5 w-1.5 rounded-full" style="background-color: var(--color-text-tertiary); animation: blink 1.4s infinite 0.4s;"></span></div></div></div>';
+      chat.appendChild(typingEl);
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      chat.scrollTop = chat.scrollHeight;
+      // 模拟AI回复
+      setTimeout(function() {
+        typingEl.remove();
+        var aiMsg = document.createElement('div');
+        aiMsg.className = 'mt-3 flex justify-start';
+        var reply = getAIReply(text);
+        aiMsg.innerHTML = '<div class="flex gap-2 max-w-[88%]"><div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style="background-color: var(--color-primary-100);"><i data-lucide="bot" class="h-4 w-4" style="color: var(--color-primary-700);"></i></div><div class="rounded-2xl rounded-tl-md border border-[var(--color-border-light)] bg-[var(--color-surface)] px-3.5 py-2.5" style="box-shadow: var(--shadow-card);"><p class="text-[14px] leading-relaxed" style="color: var(--color-text-primary);">' + reply + '</p></div></div>';
+        chat.appendChild(aiMsg);
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        chat.scrollTop = chat.scrollHeight;
+      }, 1200);
+    }
+    function getAIReply(text) {
+      if (text.indexOf('饮食') >= 0 || text.indexOf('吃') >= 0) return '根据你的饮食记录，今日摄入 1,280 kcal，蛋白质达标但碳水略高。建议晚餐减少主食，增加蔬菜摄入。';
+      if (text.indexOf('运动') >= 0 || text.indexOf('锻炼') >= 0) return '今日已运动 55 分钟，消耗 450 kcal，完成目标的 75%。建议搭配力量训练效果更佳，可尝试哑铃训练 20 分钟。';
+      if (text.indexOf('减脂') >= 0 || text.indexOf('减肥') >= 0) return '你已坚持减脂 28 天，体重下降 2.5kg，趋势良好。保持每日热量缺口 300-500 kcal，配合规律运动，目标可期！';
+      return '我已收到你的问题。作为你的 AI 健康顾问，建议你结合今日的数据记录来调整饮食和运动计划。有什么具体问题可以继续问我哦！';
+    }
+    function escapeHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // === Date Selector ===
+    function selectDate(btn) {
+      var siblings = btn.parentElement.querySelectorAll('button');
+      siblings.forEach(function(s) {
+        s.style.backgroundColor = '';
+        s.style.color = 'var(--color-text-tertiary)';
+        var dot = s.querySelector('span:last-child');
+        if (dot && dot.classList.contains('rounded-full')) {
+          // keep dot color for days with data
+        }
+      });
+      btn.style.backgroundColor = 'var(--color-primary)';
+      btn.style.color = 'var(--color-text-inverse)';
+      var dayLabel = btn.querySelector('span').textContent;
+      showToast('已切换到 ' + dayLabel);
+    }
+
+    // === Weight Modal ===
+    var modalWeight = 72.5;
+    var modalBodyFat = 22.5;
+    function adjustModalWeight(delta) {
+      if (delta < 0) {
+        modalWeight = Math.round((modalWeight + delta) * 10) / 10;
+      } else {
+        modalWeight = Math.round((modalWeight + delta) * 10) / 10;
+      }
+      var el = document.getElementById('modal-weight-value');
+      if (el) el.textContent = modalWeight.toFixed(1);
+      // 更新体脂（模拟联动）
+      if (delta < 0) {
+        modalBodyFat = Math.round((modalBodyFat - 0.05) * 10) / 10;
+      } else {
+        modalBodyFat = Math.round((modalBodyFat + 0.05) * 10) / 10;
+      }
+      var bfEl = document.getElementById('modal-bodyfat-value');
+      if (bfEl) bfEl.textContent = modalBodyFat.toFixed(1);
+    }
+    function saveWeight() {
+      var el = document.getElementById('home-weight-value');
+      if (el) el.textContent = modalWeight.toFixed(1);
+      closeWeightModal();
+      showToast('体重记录已保存');
+    }
+
+    // === Select Groups ===
+    function setupSelectGroups() {
+      document.querySelectorAll('[data-select-group]').forEach(function(container) {
+        var mode = container.getAttribute('data-select-group');
+        // 初始化：检测已选中的按钮（通过内联style中是否精确包含 var(--color-primary)）
+        var primaryPattern = /var\(--color-primary\)/;
+        container.querySelectorAll('button').forEach(function(btn) {
+          var styleStr = btn.getAttribute('style') || '';
+          var isInitiallySelected = primaryPattern.test(styleStr);
+          btn.setAttribute('data-selected', isInitiallySelected ? 'true' : 'false');
+        });
+        // 绑定点击事件
+        container.querySelectorAll('button').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            if (mode === 'single') {
+              container.querySelectorAll('button').forEach(function(s) {
+                s.setAttribute('data-selected', 'false');
+              });
+              btn.setAttribute('data-selected', 'true');
+            } else {
+              var cur = btn.getAttribute('data-selected') === 'true';
+              btn.setAttribute('data-selected', cur ? 'false' : 'true');
+            }
+            updateSelectStyles(container);
+          });
+        });
+        // 初始化样式
+        updateSelectStyles(container);
+      });
+    }
+    function updateSelectStyles(container) {
+      var styleMode = container.getAttribute('data-select-style') || 'border';
+      container.querySelectorAll('button').forEach(function(btn) {
+        var selected = btn.getAttribute('data-selected') === 'true';
+        var isPill = btn.classList.contains('rounded-full');
+        if (styleMode === 'bg') {
+          if (selected) {
+            btn.style.backgroundColor = 'var(--color-primary)';
+            btn.style.color = 'var(--color-text-inverse)';
+            btn.style.fontWeight = '600';
+          } else {
+            btn.style.backgroundColor = 'var(--color-border-light)';
+            btn.style.color = 'var(--color-text-secondary)';
+            btn.style.fontWeight = '500';
+          }
+          return;
+        }
+        if (isPill) {
+          if (selected) {
+            btn.style.backgroundColor = 'var(--color-primary)';
+            btn.style.color = 'var(--color-text-inverse)';
+            btn.style.borderColor = 'var(--color-primary)';
+            btn.style.fontWeight = '600';
+          } else {
+            btn.style.backgroundColor = 'var(--color-surface)';
+            btn.style.color = 'var(--color-text-secondary)';
+            btn.style.borderColor = 'var(--color-border)';
+            btn.style.fontWeight = '500';
+          }
+        } else {
+          if (selected) {
+            btn.style.borderColor = 'var(--color-primary)';
+            btn.style.backgroundColor = 'var(--color-primary-50)';
+            btn.style.borderWidth = '2px';
+          } else {
+            btn.style.borderColor = 'var(--color-border-light)';
+            btn.style.backgroundColor = 'var(--color-surface)';
+            btn.style.borderWidth = '1px';
+          }
+        }
+      });
+    }
+
+    // === Exercise Duration ===
+    var exerciseDuration = 30;
+    function adjustExerciseDuration(delta) {
+      exerciseDuration = Math.max(5, Math.min(240, exerciseDuration + delta));
+      var el = document.getElementById('exercise-duration');
+      if (el) el.textContent = exerciseDuration;
+      updateExerciseCalorie();
+    }
+    function updateExerciseCalorie() {
+      // 简单计算: 30min=320kcal, 按比例
+      var calorie = Math.round(exerciseDuration / 30 * 320);
+      var el = document.getElementById('exercise-calorie');
+      if (el) el.textContent = calorie;
+    }
+
+    // === Form Submit ===
+    function saveExercise() { showToast('运动记录已保存'); setTimeout(function(){ goBack(); }, 800); }
+    function publishActivity() { showToast('活动发布成功'); setTimeout(function(){ goBack(); }, 800); }
+    function pushNotice() { showToast('公告推送成功'); setTimeout(function(){ goBack(); }, 800); }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+      setupSelectGroups();
+    });
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>
